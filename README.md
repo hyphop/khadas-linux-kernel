@@ -46,8 +46,8 @@ preparing ... plz wait soon ...
 
 ## Downloads
 
-https://github.com/hyphop/khadas-linux-kernel/releases
-
++ https://github.com/hyphop/khadas-linux-kernel/releases
++ https://github.com/hyphop/khadas-linux-kernel/releases
 
 ## related projects
 
