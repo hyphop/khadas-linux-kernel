@@ -1,0 +1,61 @@
+#!/bin/bash
+
+## hyphop ##
+
+
+export INSTALL_MOD_PATH=/tmp/modules
+export INSTALL_MOD_STRIP=1 
+
+CMD(){
+    echo "[#] $@">&2
+    "$@"
+}
+
+CMD rm -rd $INSTALL_MOD_PATH/lib/modules
+
+CMD ${0%_modules} modules_install 1>/dev/null
+
+cd $INSTALL_MOD_PATH
+
+P=$PWD
+
+#tar -cJf modules.tar.xz lib
+CMD tar -czf modules.tar.gz lib
+
+cd $PWD
+
+cd $INSTALL_MOD_PATH/lib/modules/
+#cd $INSTALL_MOD_PATH/lib/modules/*
+
+for v in ?.*.*; do
+    [ "$v" = "0.0.0" ] || {
+	CMD ln -sf "$v" 0.0.0
+    }
+done
+
+cd 0.0.0
+
+rm build source
+
+CMD find -name \*.ko > modules.list
+
+while read m ; do
+    k=$(basename $m)
+    n=${m#./}
+    l=$(perl -e "\$_='$n'; s/\\w+\//..\//g; print \$_")
+#    echo "[i] $k - $n - $l"
+    mv $n .
+    ln -sf $l $m
+
+done < modules.list
+
+cd $PWD
+
+cd $INSTALL_MOD_PATH
+
+#tar -cJf modules.openwrt.tar.xz lib
+CMD tar -czf modules.openwrt.tar.gz lib
+
+cd $PWD
+
+ls -l1 *.xz

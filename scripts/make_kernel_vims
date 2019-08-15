@@ -1,0 +1,42 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= make kernel wrapper
+
+#/ USAGE make_kernel_vims [ARGS]
+
+D=$(dirname $0)
+DR=$(realpath $D)
+
+export PATH=$D/../../fenix/build/toolchains/gcc-linaro-aarch64-linux-gnu/bin:$PATH
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+
+for DIR in $D/../../fenix/linux; do
+    [ -d "$DIR" ] && break
+done
+
+CMD(){
+    echo "[#] $@">&2
+    "$@"
+}
+#./,make_kernel_vims ../../../../kvims_light_defconfig
+
+CMD make -C "$DIR" "$@"
+
+# post
+
+T=/tmp/modules
+
+[ -d $T ] || \
+    mkdir $T
+
+#cp $DIR/defconfig $T/defconfig
+[ -f $T/config.gz ] && \
+CMD mv $T/config.gz $T/config.gz.old
+CMD gzip -c $DIR/.config > $T/config.gz
+CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
+#cp $DIR/arch/arm64/boot/dts/amlogic/*vim2*.dtb $T/linux.dtb
+#dtc $T/linux.dtb > $T/linux.dts 2>/dev/null
+CMD cp $DIR/arch/arm64/boot/Image* $T

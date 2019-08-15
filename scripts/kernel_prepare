@@ -1,0 +1,35 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= download kernel source
+
+set -e 
+
+D=$(dirname $0)
+N=$(basename $0)
+DR=$(realpath $D)
+
+LINK=https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.2.8.tar.xz
+LINK=https://git.kernel.org/torvalds/t/linux-5.3-rc4.tar.gz
+
+FILE=$(basename $LINK)
+
+
+cd /tmp
+
+
+[ -f "$FILE" ] || {
+    wget -c $LINK
+    echo "[i] download $LINK">&2
+}
+
+
+DIR="${FILE%.tar.*}"
+
+#linux-5.3-rc4 
+[ -d $DIR ] || {
+echo "[i] extract $FILE => $DIR">&2
+tar -xf $FILE
+}
+
