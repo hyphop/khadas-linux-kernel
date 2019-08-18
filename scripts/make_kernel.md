@@ -19,8 +19,9 @@ its same as kernel make
 
 ## Example
 
-    make_kernel_mainline_vims
-    make_kernel_mainline_vims_modules
+    ./kernel_prepare && \
+    ./make_kernel_mainline_vims2 && \
+    ./make_kernel_mainline_vims_modules
 
 ## OUTPUT
 

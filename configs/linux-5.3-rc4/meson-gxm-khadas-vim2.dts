@@ -400,8 +400,9 @@
 //		compatible = "winbond,w25q16", "jedec,spi-nor";
 		compatible = "winbond,w25q128fw", "jedec,spi-nor";
 		reg = <0>;
-//		spi-max-frequency = <3000000>;
-		spi-max-frequency = <26000000>;
+//		spi-max-frequency = <3000000>; // slow
+//		spi-max-frequency = <26000000>; // OK
+		spi-max-frequency = <104000000>; // Max read speed 
 	};
 };
 
