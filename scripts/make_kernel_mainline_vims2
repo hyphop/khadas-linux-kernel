@@ -26,7 +26,7 @@ export CROSS_COMPILE=aarch64-linux-gnu-
 
 #linux-5.3-rc4.tar.gz
 
-for DIR in /tmp/linux-*; do
+for DIR in /tmp/linux-test; do
     [ -d "$DIR" ] && break
 done
 
@@ -51,10 +51,10 @@ DEF_CONFIG=kvims_defconfig
     CMD cp $DR/../configs/$N/defconfig $DIR/arch/$ARCH/configs/$DEF_CONFIG
 
     C=meson-gxm-khadas-vim2.dts
-    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C
+#    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C
 #    diff $DR/../configs/$N/$C $E
-    CMD mv $E $E.org
-    CMD cp $DR/../configs/$N/$C $E
+#    CMD mv $E $E.org
+#    CMD cp $DR/../configs/$N/$C $E
 
     CMD make -C "$DIR" $DEF_CONFIG
 #    CMD make -C "$DIR" menuconfig
