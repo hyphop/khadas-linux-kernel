@@ -1,0 +1,116 @@
+#!/usr/bin/perl
+
+## hyphop ##
+
+#= kernel config merge replace values
+
+our %o;
+
+our $in;
+our $out;
+
+our $REPLACE;
+
+for (@ARGV) {
+    if (/(\w+)=(y|n|m|$)/i) {
+        my $n = uc $1;
+        my $v = lc $2 || 'n';
+
+        $n = "CONFIG_$n" unless $n =~ /^CONFIG_/;
+#       warn "[i] $n = $v";
+        $o{$n} = $v;
+    }
+    elsif (/^\-r/) {
+        $REPLACE = 1;
+	warn "[i] replace mode\n";
+          #replace
+          #	;
+    }
+    else {
+
+        if ( -f $_ && !defined $in ) {
+            $in = $_;
+        }
+        else {
+            $out = $_;
+        }
+
+    }
+}
+
+unless ( keys %o ) {
+    warn "[e] undefice any config values\n";
+    exit 1;
+}
+
+warn "[i] in $in > $out\n";
+
+open IN, "$in";
+
+if ( defined $out || $REPLACE ) {
+    our $T = "/tmp/$$.tmp";
+    open T, ">$T";
+}
+else {
+    open T, ">&STDOUT";
+}
+
+while (<IN>) {
+    if ( /(# )?(CONFIG_\w+)(\s|=(y|m))/ && $o{$2} ) {
+        my $a = $4 || 'n';
+        if ( $a ne $o{$2} ) {
+            warn "[i] replace - $2=$a <= $o{$2}\n";
+
+            if ( $o{$2} eq 'n' ) {
+                print T "# $2 is not set\n";
+            }
+            else {
+                print T "$2=$o{$2}\n";
+            }
+            ##
+	    $O{$2} = delete $o{$2}
+        }
+        else {
+            print T "$_";
+	    warn "[i] same: $2=$o{$2}\n";
+	    delete $o{$2};
+        }
+    
+    }
+    else {
+        print T "$_";
+    }
+}
+
+print T "\n# add\n\n" if keys %o;
+
+for ( sort keys %o ) {
+
+    warn "[i] add $_=$o{$_}\n";
+
+    if ( $o{$_} eq 'n' ) {
+        print T "# $_ is not set\n";
+    }
+    else {
+        print T "$_=$o{$_}\n";
+    }
+
+}
+
+close T;
+close IN;
+
+if ( $REPLACE ) {
+    if ( keys %O ) {
+	warn "[i] $T => $in";
+	`mv "$T" "$in"`;
+    } else {
+	warn "[i] not changes for $in\n";
+    }
+} else {
+
+    unlink $T;
+
+}
+
+

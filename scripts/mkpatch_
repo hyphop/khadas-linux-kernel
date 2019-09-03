@@ -1,0 +1,20 @@
+#!/bin/bash
+
+## hyphop ##
+
+#= make patch
+
+CMD(){
+    echo "[#] $@">&2
+    $@
+}
+
+for f in $@; do
+
+a=${f/\//.ro/}
+b=${f/\//.rw/}
+
+CMD diff -pruN $a $b
+
+done 
+

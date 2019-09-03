@@ -1,0 +1,20 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= alternate replace config
+
+D=$(dirname 0)
+
+. $D/config.conf
+
+CONFIG="$KERNEL_PATH2/$LINUX_VER/.config"
+
+
+[ -f $CONFIG ] || {
+    echo "[e] config not found $CONFIG">&2
+    exit 1
+}
+
+$D/config_merge $CONFIG MMC_MESON_GX=m -r
+

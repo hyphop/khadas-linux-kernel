@@ -1,0 +1,33 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= patcher 
+
+set -e 
+
+[ -d "$1" ] && {
+    DIR=$1
+    shift
+}
+
+[ "$DIR" ] || {
+for DIR in \
+    /tmp/linux-* \
+    "" \
+; do
+    [ -d "$DIR" ] && break
+done
+}
+
+[ "$DIR" ] || {
+    echo "[i] undef patch DIR">&2
+    exit 1
+}
+
+echo "[i] patch dir $DIR">&2
+
+for p in $@; do
+    echo "[i] patch $p">&2
+    patch -d $DIR -p1 < $p
+done

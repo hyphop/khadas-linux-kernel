@@ -1,0 +1,8 @@
+
+// ## hyphop ##
+
+#include "meson-g12b-s922x-khadas-vim3.dts"
+#include "krescue-leds.dtsi"
+#include "krescue-spifc-g12.dtsi"
+#include "krescue-vim3.dtsi"
+#include "krescue-vims.dtsi"

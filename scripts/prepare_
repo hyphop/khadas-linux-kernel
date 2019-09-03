@@ -1,0 +1,41 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= prepare 
+
+set -e 
+
+cd $(dirname 0)
+
+. ./config.conf
+
+echo "[i] krescue prepare">&2
+
+echo "[i] add custom patches">&2
+
+K="$KERNEL_PATH2/$LINUX_VER"
+
+#./patch_ ../patches/exfat.patch
+#./patch_ ../patches/gitignore-local-fix.patch
+#./patch_ ../patches/vim3/*.patch
+
+# add custom files
+
+echo "[i] add custom files">&2
+
+rsync -av --inplace ../files/kernel/mainline/* $K
+
+M=$K/arch/arm64/boot/dts/amlogic/Makefile
+
+grep krescue $M || {
+    echo "[i] add custom dtb">&2
+echo "
+    dtb-y += krescue-vim3-a311d.dtb
+    dtb-y += krescue-vims-s922x.dtb
+" >> $M
+
+}
+
+
+#cp 

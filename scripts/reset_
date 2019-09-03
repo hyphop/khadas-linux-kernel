@@ -1,0 +1,26 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= reset kernel source to default state
+
+D=$(dirname $0)
+
+. $D/config.conf
+
+TO="$D/$TO2"
+
+K=$KERNEL_PATH2/$LINUX_VER
+
+[ -d $K ] || {
+    echo "[i] undef dir $K">&2
+    exit 1
+} 
+
+$D/mount_overlay_squash $K -c
+
+echo "[i] complite">&2
+
+ls -l1 $K.rw
+
+

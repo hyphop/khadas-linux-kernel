@@ -1,0 +1,92 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= make kernel wrapper
+
+#/ USAGE $0 [ARGS]
+#/ args:
+#/ menuconfig
+#/ dtbs
+#/ -jN
+#/ savedefconfig
+#/ Image
+#/ help
+#/ ...
+
+set -e 
+
+D=$(dirname $0)
+N=$(basename $0)
+DR=$(realpath $D)
+
+#export PATH=$(realpath $D/../../fenix/build/toolchains/gcc-linaro-aarch64-linux-gnu/bin):$PATH
+export PATH=$(realpath $D/../../gcc-x86_64_aarch64-linux-gnu/bin):$PATH
+
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+
+#linux-5.3-rc4.tar.gz
+
+for DIR in \
+    ../../fenix/linux.vim3 \
+; do
+    [ -d "$DIR" ] && break
+done
+
+CMD(){
+    echo "[#] $@">&2
+    "$@"
+}
+
+# cross gcc test
+CMD ${CROSS_COMPILE}gcc --version  || {
+    echo "[e] cross gcc failed">&2
+    exit 1
+}
+
+DEF_CONFIG=kvims_defconfig
+
+#./,make_kernel_vims ../../../../kvims_light_defconfig
+[ -f "$DIR/.config" ] || {
+    N=$(basename $DIR);
+    echo "[i] config $N <= $DEF_CONFIG">&2
+
+    CMD cp $DR/../configs/$N/defconfig $DIR/arch/$ARCH/configs/$DEF_CONFIG
+
+    C=meson-gxm-khadas-vim2.dts
+#    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C
+#    diff $DR/../configs/$N/$C $E
+#    CMD mv $E $E.org
+#    CMD cp $DR/../configs/$N/$C $E
+
+    CMD make -C "$DIR" $DEF_CONFIG
+#    CMD make -C "$DIR" menuconfig
+}
+
+ARGS="$@"
+
+[ "$ARGS" ] || {
+    ARGS="-j8"
+}
+
+CMD make -C "$DIR" $ARGS
+
+# post
+
+T=/tmp/$N
+
+[ -d /tmp/modules ] || \
+    mkdir /tmp/modules
+
+ln -sf /tmp/modules $T
+
+#cp $DIR/defconfig $T/defconfig
+[ -f $T/config.gz ] && \
+CMD mv $T/config.gz $T/config.gz.old
+CMD gzip -c $DIR/.config > $T/config.gz
+CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
+#cp $DIR/arch/arm64/boot/dts/amlogic/*vim2*.dtb $T/linux.dtb
+#dtc $T/linux.dtb > $T/linux.dts 2>/dev/null
+CMD cp $DIR/arch/arm64/boot/Image* $T
+

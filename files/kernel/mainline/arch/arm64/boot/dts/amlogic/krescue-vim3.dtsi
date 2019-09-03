@@ -1,0 +1,9 @@
+
+// VIM3 add
+
+&i2c3{
+    pinctrl-0 = <&i2c3_sck_a_pins>, <&i2c3_sda_a_pins>;
+    clock-frequency = <100000>; /* default 100k */
+    pinctrl-names = "default";
+    status = "okay";
+};

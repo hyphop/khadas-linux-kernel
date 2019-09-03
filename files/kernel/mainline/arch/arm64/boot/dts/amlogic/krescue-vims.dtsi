@@ -1,0 +1,38 @@
+
+// common VIMS
+
+/ {
+    adc-keys {
+	compatible = "adc-keys";
+	io-channels = <&saradc 2>;
+	io-channel-names = "buttons";
+	keyup-threshold-microvolt = <1710000>;
+
+	button-function {
+	    label = "Function";
+	    linux,code = <KEY_TAB>;
+	    press-threshold-microvolt = <10000>;
+	};
+    };
+
+    gpio-keys-polled {
+	compatible = "gpio-keys-polled";
+	poll-interval = <100>;
+
+	power-button {
+	    label = "power";
+	    linux,code = <KEY_POWER>;
+	    gpios = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_LOW>;
+	};
+    };
+};
+
+
+&led_red{
+    default-state = "off";
+};
+
+&led_white{
+    default-state = "on";
+    linux,default-trigger = "heartbeat";
+};

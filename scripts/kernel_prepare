@@ -4,32 +4,58 @@
 
 #= download kernel source
 
-set -e 
+#set -e 
 
 D=$(dirname $0)
 N=$(basename $0)
 DR=$(realpath $D)
 
-LINK=https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.2.8.tar.xz
-LINK=https://git.kernel.org/torvalds/t/linux-5.3-rc4.tar.gz
+. "$DR/config.conf"
+
+TO="$D/$TO2"
+
+uid=$(id -u)
+gid=$(id -g)
+
+CMD(){
+    echo "">&2
+    $@
+}
+
+DL(){
+    
+    echo "[i] download $DOWNLOAD_BASE/$1 $2">&2
+    curl -jkL "$DOWNLOAD_BASE/$1" -o "$2" -C- -#
+}
+
+for LINK in $LINUX_SRC_SFS ; do
 
 FILE=$(basename $LINK)
 
+DL "$LINK" "$TO$FILE"
 
-cd /tmp
+echo "[i] $FILE">&2
 
+T="$(realpath "$KERNEL_PATH2/${FILE%.*}")"
 
-[ -f "$FILE" ] || {
-    wget -c $LINK
-    echo "[i] download $LINK">&2
+grep "$T" /proc/mounts || {
+    CMD $DR/mount_overlay_squash "$TO$FILE" "$T"
 }
 
+done
 
-DIR="${FILE%.tar.*}"
+for LINK in $GCC_SRC_SFS; do
 
-#linux-5.3-rc4 
-[ -d $DIR ] || {
-echo "[i] extract $FILE => $DIR">&2
-tar -xf $FILE
+FILE=$(basename $LINK)
+
+DL "$LINK" "$TO$FILE"
+
+T="$(realpath "$GCC_PATH")"
+
+grep "$T" /proc/mounts || {
+    CMD sudo mount "$TO$FILE" "$T"
 }
+done
+
+
 

@@ -1,0 +1,115 @@
+#!/bin/sh
+
+## hyphop ## 
+
+#= mount squash + overlay is rw mode
+
+#set -e 
+
+uid=$(id -u)
+gid=$(id -g)
+
+CMD(){
+    echo "[#] $@"
+    $@
+}
+
+grep squashfs /proc/filesystems 1>/dev/null || CMD sudo modprobe squashfs
+grep squashfs /proc/filesystems 1>/dev/null || { 
+    echo "[e] not have squashfs"
+    exit 1
+}
+
+ovlmod=""
+
+
+for v in overlayfs overlay aufs; do
+    [ -d /sys/module/$v ] || { 
+	CMD modprobe $v 2>/dev/null
+    }
+    [ -d /sys/module/$v ] && {
+	ovlmod=$v
+	break
+    }
+done
+
+sfs="$1"
+
+[ "$sfs" ] || {
+    echo "[i] squash not defined">&2
+    exit 1
+}
+
+dst="$2"
+
+## dir [-c|-d] == clear | umount
+case "$dst" in
+    -d*)
+    CMD sudo umount $sfs
+    CMD sudo umount $sfs.ro
+    return
+    ;;
+
+    -c*)
+    dst=
+    [ -d $sfs ] && {
+        dst=$sfs
+    }
+    CLEAN=1
+    ;;
+esac
+
+[ -e "$sfs" ] || {
+    echo "[i] squash '$sfs' not found ">&2
+    exit 1
+}
+
+[ "$dst" ]	||	dst="${sfs%.*}"
+[ -d "$dst" ]	||	CMD mkdir "$dst"
+
+#sfs=$src.squashfs
+
+ro_level="$dst.ro"
+rw_level="$dst.rw"
+wk_level="$dst.wk"
+
+[ -d "$ro_level" ] || CMD mkdir "$ro_level"
+[ -d "$rw_level" ] || CMD mkdir "$rw_level"
+[ -d "$wk_level" ] || CMD mkdir "$wk_level"
+
+[ "$CLEAN" ] && {
+    echo "[i] clean rw layer">&2
+	rm -rf $rw_level/*
+	rm -rf $rw_level/.*	2>/dev/null 
+	CMD sudo mount -o remount $dst
+    exit 1
+}
+
+CMD sudo mount -o ro -o uid=$uid,gid=$gid $sfs $ro_level
+
+case $ovlmod in  
+    overlay)
+    CMD sudo mount -t overlay overlay -o lowerdir=$ro_level,upperdir=$rw_level,workdir=$wk_level \
+    $dst
+    break
+    ;;
+    overlayfs)
+    CMD sudo mount -t overlayfs overlay -o lowerdir=$ro_level,upperdir=$rw_level \
+    $dst
+    break
+    ;;
+    aufs)
+    CMD sudo mount -t aufs overlay -o br:$rw_level:$ro_level \
+    $dst
+    break
+    ;;
+esac
+
+grep $wk_level /proc/mounts | grep $ovlmod 1>/dev/null || {
+    echo "[e] working dir "$work_dir" not mounted as overlay">&2
+    exit 1
+}
+
+echo "[i] working dir $work_dir mounted as overlay  RO: $ro_level RW: $rw_level">&2
+
+## OK
