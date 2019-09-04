@@ -20,7 +20,9 @@ cd $INSTALL_MOD_PATH
 P=$PWD
 
 #tar -cJf modules.tar.xz lib
-#CMD tar -czf modules.tar.gz lib
+
+[ $TAR ] && \
+CMD tar -czf modules.tar.gz lib
 
 cd $PWD
 
@@ -54,7 +56,9 @@ cd $PWD
 cd $INSTALL_MOD_PATH
 
 #tar -cJf modules.openwrt.tar.xz lib
-#CMD tar -czf modules.openwrt.tar.gz lib
+
+[ $TAR ] && \
+CMD tar -czf modules.openwrt.tar.gz lib
 
 cd $PWD
 

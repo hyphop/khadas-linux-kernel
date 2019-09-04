@@ -1,0 +1,39 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= alternate replace config
+
+# USAGE EXAMPLES
+#
+# ./kernel_config ../files/configs/eth_m
+#
+
+D=$(dirname 0)
+
+. $D/config.conf
+
+CONFIG="$KERNEL_PATH2/$LINUX_VER/.config"
+
+
+[ -f $CONFIG ] || {
+    echo "[e] config not found $CONFIG">&2
+    exit 1
+}
+
+ARGS=
+
+for c in $@; do
+    [ -f $c ] && {
+	ARGS="$ARGS $(cat $c)"
+	continue
+    }
+    ARGS="$ARGS $c"
+done
+
+CMD(){
+    echo "[#] $@">&2
+    $@
+}
+CMD $D/config_merge $CONFIG -r $ARGS
+

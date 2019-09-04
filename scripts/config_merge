@@ -39,7 +39,7 @@ for (@ARGV) {
 }
 
 unless ( keys %o ) {
-    warn "[e] undefice any config values\n";
+    warn "[e] undef any config values\n";
     exit 1;
 }
 
@@ -87,7 +87,7 @@ print T "\n# add\n\n" if keys %o;
 for ( sort keys %o ) {
 
     warn "[i] add $_=$o{$_}\n";
-
+    
     if ( $o{$_} eq 'n' ) {
         print T "# $_ is not set\n";
     }
@@ -95,22 +95,24 @@ for ( sort keys %o ) {
         print T "$_=$o{$_}\n";
     }
 
+    $O{$_} = delete $o{$_};
 }
+
 
 close T;
 close IN;
 
 if ( $REPLACE ) {
     if ( keys %O ) {
-	warn "[i] $T => $in";
+	warn "[i] $T => $in\n";
 	`mv "$T" "$in"`;
     } else {
 	warn "[i] not changes for $in\n";
     }
 } else {
 
-    unlink $T;
 
 }
 
+unlink $T;
 
