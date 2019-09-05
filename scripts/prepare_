@@ -32,7 +32,8 @@ grep krescue $M || {
     echo "[i] add custom dtb">&2
 echo "
     dtb-y += krescue-vim3-a311d.dtb
-    dtb-y += krescue-vims-s922x.dtb
+    dtb-y += krescue-vim3-s922x.dtb
+    dtb-y += krescue-vim2.dtb
 " >> $M
 
 }
