@@ -1,0 +1,17 @@
+
+// LEDS
+
+/ {
+
+    pwmleds {
+	compatible = "pwm-leds";
+
+	power {
+	    label = "vim2:white:power";
+	    pwms = <&pwm_AO_ab 1 7812500 0>;
+	    max-brightness = <255>;
+	    linux,default-trigger = "default-on";
+	};
+    };
+
+};
