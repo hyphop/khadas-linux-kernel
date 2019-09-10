@@ -1,3 +1,3 @@
 language: c
 #before_install: sudo apt-get install lzop
-script:  cd scripts; ./auto
+script:  cd scripts; sudo ./auto
