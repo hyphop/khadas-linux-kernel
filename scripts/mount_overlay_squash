@@ -131,12 +131,12 @@ echo "[i]  $dst => mounted as overlay  RO: $ro_level RW: $rw_level WK: $wk_level
 
 ls -l1 $dst*
 
-mkdir $dst/_RW_TEST_ || {
+mkdir -p $dst/Documentation/_RW_TEST_ || {
     echo "[i] not possible write to $dst">&2
     exit 1
 }
 
-rm -rdf $dst/_RW_TEST_
+rm -rdf $dst/Documentation/_RW_TEST_
 
 
 ## OK
