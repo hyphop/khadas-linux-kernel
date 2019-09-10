@@ -58,7 +58,7 @@ DEF_CONFIG=kvims_defconfig
     N=$(basename $DIR);
     echo "[i] config $N <= $DEF_CONFIG">&2
     T2=$DIR/arch/$ARCH/configs/$DEF_CONFIG
-    CMD cp $DR/../configs/$N/defconfig  || {
+    CMD cp $DR/../configs/$N/defconfig || {
 	CMD cp $DR/../configs/linux-mainline/defconfig $T2
     }
 

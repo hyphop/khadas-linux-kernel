@@ -4,7 +4,7 @@
 
 #= download kernel source
 
-#set -e 
+#set -e
 
 D=$(dirname $0)
 N=$(basename $0)
@@ -52,9 +52,14 @@ DL "$LINK" "$TO$FILE"
 
 T="$(realpath "$GCC_PATH")"
 
+[ -d "$T" ] || {
+    mkdir -p $T
+}
+
 grep "$T" /proc/mounts || {
     CMD sudo mount "$TO$FILE" "$T"
 }
+
 done
 
 

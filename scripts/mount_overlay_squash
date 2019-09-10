@@ -125,4 +125,13 @@ grep "$wk_level " /proc/mounts | grep $ovlmod 1>/dev/null || {
 
 echo "[i] working dir $work_dir mounted as overlay  RO: $ro_level RW: $rw_level">&2
 
+
+mkdir $dst/_RW_TEST_ || {
+    echo "[i] not possible write to $dst">&2
+    exit 1
+}
+
+rm -rdf $dst/_RW_TEST_
+
+
 ## OK

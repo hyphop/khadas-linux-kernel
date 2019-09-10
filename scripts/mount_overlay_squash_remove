@@ -1,0 +1,9 @@
+#!/bin/sh
+
+## hyphop ##
+
+./mount_overlay_squash /tmp/linux-5.3-rc6 -c
+./mount_overlay_squash /tmp/linux-5.3-rc6 -d
+
+
+
