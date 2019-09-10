@@ -22,10 +22,12 @@ grep squashfs /proc/filesystems 1>/dev/null || {
 
 ovlmod=""
 
-
 for v in overlayfs overlay aufs; do
+
+#    echo "[i] check mod: $v">&2
+ 
     [ -d /sys/module/$v ] || { 
-	CMD modprobe $v 2>/dev/null
+	CMD sudo modprobe $v 2>/dev/null
     }
     [ -d /sys/module/$v ] && {
 	ovlmod=$v
@@ -41,6 +43,8 @@ sfs="$1"
 }
 
 dst="$2"
+
+echo "[i] overlay module: $ovlmod">&2
 
 ## dir [-c|-d] == clear | umount
 case "$dst" in
@@ -85,7 +89,14 @@ wk_level="$dst.wk"
     exit 1
 }
 
-CMD sudo mount -o ro -o uid=$uid,gid=$gid $sfs $ro_level
+grep "$ro_level " /proc/mounts || {
+    echo "[i] mount ro $sfs => $ro_level">&2
+    CMD sudo mount -o ro -o uid=$uid,gid=$gid $sfs $ro_level
+}
+
+
+grep "$dst " /proc/mounts || {
+echo "[i] mount overlay $sfs => $dst">&2
 
 case $ovlmod in  
     overlay)
@@ -105,7 +116,9 @@ case $ovlmod in
     ;;
 esac
 
-grep $wk_level /proc/mounts | grep $ovlmod 1>/dev/null || {
+}
+
+grep "$wk_level " /proc/mounts | grep $ovlmod 1>/dev/null || {
     echo "[e] working dir "$work_dir" not mounted as overlay">&2
     exit 1
 }
