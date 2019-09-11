@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/hyphop/khadas-linux-kernel.svg?branch=master)](https://travis-ci.com/hyphop/khadas-linux-kernel)
+
 # khadas linux kernel
 
 special linux kernel for usage on Khadas VIMs boards based on legacy kernel from amlogic

@@ -84,9 +84,8 @@ esac
 ARGS="$@"
 
 [ "$ARGS" ] || {
-    ARGS="-j8"
+    ARGS="-j$(nproc)"
 }
-
 
 CMD make -C "$DIR" $ARGS
 

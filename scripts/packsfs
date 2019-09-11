@@ -1,0 +1,47 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= squash fs packer
+
+[ "$COMP" ] || COMP="xz"
+
+CMD(){
+    echo "[x] $@">&2
+    "$@"
+}
+
+## some triks for size
+[ "$CMP_BLOCK_SIZE" ] || CMP_BLOCK_SIZE=1024k
+#-Xbcj x86
+
+[ "$COMP" = "xz" ] && CMP_OPTS="-Xdict-size $CMP_BLOCK_SIZE -Xbcj x86"
+
+IN="$1"
+OUT="$2"
+
+[ "$IN" ] || {
+    echo "[e] source undefined">&2
+    exit 1
+}
+
+[ -e "$OUT" ] && {
+    echo "[e] $OUT exist">&2
+    exit 1
+}
+
+[ "$OUT" ] || OUT="$IN.squashfs"
+
+[ "$UID" ] || UID="$(id -u)"
+[ "$GID" ] || GID="$(id -g)"
+
+CMD   mksquashfs \
+    "$IN" \
+    "$OUT" \
+    -force-uid $UID \
+    -force-gid $GID \
+    -b $CMP_BLOCK_SIZE \
+    -comp $COMP $CMP_OPTS || {
+    echo "[e] failed ">&2
+    exit 1
+}
