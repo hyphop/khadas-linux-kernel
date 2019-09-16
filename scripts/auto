@@ -9,10 +9,11 @@ set -e
 ./kernel_prepare
 ./patch_ ../patches/0001-vim3.patch
 ./patch_ ../patches/0002-fix_usb3_otg_port_to_device_mode.patch
+./patch_ ../patches/gitignore-local-fix.patch
 ./patch_ ../patches/exfat.patch
 ./prepare_
 
 ./make_kernel_mainline_vimsX dtbs
-
-#./make_kernel_mainline_vimsX_modules
+./make_kernel_mainline_vimsX
+./make_kernel_mainline_vimsX_modules
 

@@ -81,8 +81,8 @@ wk_level="$dst.wk"
 [ -d "$rw_level" ] || CMD mkdir "$rw_level"
 [ -d "$wk_level" ] || CMD mkdir "$wk_level"
 
-ls -l1 /tmp
-ls -l1 $dst*
+#ls -l1 /tmp
+#ls -l1 $dst*
 
 [ "$CLEAN" ] && {
     echo "[i] clean rw layer">&2
@@ -129,7 +129,7 @@ grep "$wk_level " /proc/mounts | grep $ovlmod 1>/dev/null || {
 echo "[i]  $dst => mounted as overlay  RO: $ro_level RW: $rw_level WK: $wk_level">&2
 
 
-ls -l1 $dst*
+#ls -l1 $dst*
 
 mkdir -p $dst/Documentation/_RW_TEST_ || {
     echo "[i] not possible write to $dst">&2

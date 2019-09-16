@@ -104,6 +104,7 @@ Subject: [PATCH] vim3
  drivers/media/rc/keymaps/rc-wetek-hub.c            |   55 +
  drivers/media/rc/keymaps/rc-wetek-play2.c          |   95 +
  drivers/media/rc/keymaps/rc-x96max.c               |   85 +
+ drivers/media/rc/meson-ir.c                        |    3 +-
  drivers/media/v4l2-core/v4l2-ioctl.c               |    1 +
  drivers/nvmem/meson-efuse.c                        |   24 +-
  drivers/pinctrl/meson/pinctrl-meson-g12a.c         |    9 +
@@ -20290,6 +20291,20 @@ index 0000000..d947e46
 +
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Christian Hewitt <christianshewitt@gmail.com");
+diff --git a/drivers/media/rc/meson-ir.c b/drivers/media/rc/meson-ir.c
+index 72a7bbb..a65853a 100644
+--- a/drivers/media/rc/meson-ir.c
++++ b/drivers/media/rc/meson-ir.c
+@@ -91,7 +91,8 @@ static irqreturn_t meson_ir_irq(int irqno, void *dev_id)
+ 	status = readl_relaxed(ir->reg + IR_DEC_STATUS);
+ 	rawir.pulse = !!(status & STATUS_IR_DEC_IN);
+ 
+-	ir_raw_event_store_with_timeout(ir->rc, &rawir);
++	if (ir_raw_event_store_with_filter(ir->rc, &rawir))
++		ir_raw_event_handle(ir->rc);
+ 
+ 	spin_unlock(&ir->lock);
+ 
 diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
 index b1f4b99..74abce8 100644
 --- a/drivers/media/v4l2-core/v4l2-ioctl.c

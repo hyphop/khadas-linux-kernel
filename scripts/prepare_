@@ -34,6 +34,19 @@ echo "
     dtb-y += krescue-vim3-a311d.dtb
     dtb-y += krescue-vim3-s922x.dtb
     dtb-y += krescue-vim2.dtb
+    dtb-y += krescue-vim1.dtb
+" >> $M
+
+}
+
+##
+
+M=$K/drivers/media/rc/keymaps/Makefile
+
+grep krescue $M || {
+
+echo "
+obj-m += rc-krescue.o
 " >> $M
 
 }

@@ -4,5 +4,6 @@ share/*
 !README.md
 !README.md
 .unused/
+modules/
 
 
