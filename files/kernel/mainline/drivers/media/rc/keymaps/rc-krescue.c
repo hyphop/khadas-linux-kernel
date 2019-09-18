@@ -4,6 +4,8 @@
 #include <media/rc-map.h>
 #include <linux/module.h>
 
+#define RC_MAP_KHADAS                    "rc-khadas"
+
 static struct rc_map_table krescue[] = {
 
 	{ 0x14, KEY_POWER },

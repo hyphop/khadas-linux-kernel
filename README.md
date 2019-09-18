@@ -8,7 +8,7 @@ https://github.com/hyphop/khadas-linux-kernel
 
 ## Features
 
-+ 4.9.179 linux kernel
++ mainline 
 + small kernel size
 + kexec
 + squashfs + overlayfs
@@ -19,7 +19,7 @@ https://github.com/hyphop/khadas-linux-kernel
 ## Status
 
 + experemental
-+ VIM3 VIM2 tested OK
++ VIM3 VIM2 VIM1 tested OK
 
 ## build
 

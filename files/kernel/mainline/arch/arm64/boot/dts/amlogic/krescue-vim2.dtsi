@@ -1,5 +1,5 @@
 
-// common VIMS
+// common VIM2
 
 / {
 
@@ -28,7 +28,6 @@
     };
 
 };
-
 
 &sd_emmc_a {
     status = "okay";
