@@ -33,6 +33,8 @@
     status = "okay";
 //  vim2 wifi lost
 //  max-frequency = <50000000>;
-//  wifi work again
-    max-frequency = <100000000>;
+//  wifi work again but unstable
+//  max-frequency = <100000000>;
+//  stable freq
+    max-frequency = <60000000>;
 };

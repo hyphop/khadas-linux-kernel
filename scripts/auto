@@ -4,7 +4,7 @@
 
 ## hyphop ##
 
-set -e 
+set -e
 
 ./kernel_prepare
 ./patch_ ../patches/0001-vim3.patch
@@ -14,7 +14,7 @@ set -e
 ./patch_ ../patches/0333-exfat.patch
 ./prepare_
 
-./make_kernel_mainline_vimsX dtbs
-#./make_kernel_mainline_vimsX
-#./make_kernel_mainline_vimsX_modules
+#./make_kernel_mainline_vimsX dtbs
+./make_kernel_mainline_vimsX
+./make_kernel_mainline_vimsX_modules
 
