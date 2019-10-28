@@ -62,4 +62,5 @@ CMD tar -czf modules.openwrt.tar.gz lib
 
 cd $PWD
 
-ls -l1 *.xz
+ls -l1 *.gz
+

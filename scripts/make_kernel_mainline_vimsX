@@ -58,9 +58,9 @@ DEF_CONFIG=kvims_defconfig
     N=$(basename $DIR);
     echo "[i] config $N <= $DEF_CONFIG">&2
     T2=$DIR/arch/$ARCH/configs/$DEF_CONFIG
-    CMD cp $DR/../configs/$N/defconfig || {
+#    CMD cp $DR/../configs/$N/defconfig $T2 || {
 	CMD cp $DR/../configs/linux-mainline/defconfig $T2
-    }
+#    }
 
     C=meson-gxm-khadas-vim2.dts
 #    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C
@@ -68,12 +68,19 @@ DEF_CONFIG=kvims_defconfig
 #    CMD mv $E $E.org
 #    CMD cp $DR/../configs/$N/$C $E
 
+
     CMD make -C "$DIR" $DEF_CONFIG
 #    CMD make -C "$DIR" menuconfig
 }
 
+
+
 ALL=
 case "$1" in
+    -n*)
+    echo "[i] noop mode">&2
+    exit 0
+    ;;
     -a*)
     echo "[i] build all">&2
     ALL=1

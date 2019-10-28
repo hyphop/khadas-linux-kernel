@@ -1,0 +1,85 @@
+From 9e77a56b5652d6c51c29f18b486760cb8589a9e0 Mon Sep 17 00:00:00 2001
+From: hyphop <email2tema@gmail.com>
+Date: Mon, 28 Oct 2019 09:43:28 +0300
+Subject: [PATCH] wifi 4359 test mainline
+
+---
+ drivers/bluetooth/btbcm.c                                 | 2 +-
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c | 1 +
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c   | 1 +
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c   | 2 ++
+ include/linux/mmc/sdio_ids.h                              | 1 +
+ 5 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index 2d2e6d8..76e9814 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -332,7 +332,7 @@ static const struct bcm_subver_table bcm_uart_subver_table[] = {
+ 	{ 0x6109, "BCM4335C0"	},	/* 003.001.009 */
+ 	{ 0x610c, "BCM4354"	},	/* 003.001.012 */
+ 	{ 0x2122, "BCM4343A0"	},	/* 001.001.034 */
+-	{ 0x2209, "BCM43430A1"  },	/* 001.002.009 */
++	{ 0x2209, "BCM43438A1"  },  /* 001.002.009 */
+ 	{ 0x6119, "BCM4345C0"	},	/* 003.001.025 */
+ 	{ 0x6606, "BCM4345C5"	},	/* 003.006.006 */
+ 	{ 0x230f, "BCM4356A2"	},	/* 001.003.015 */
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+index fc12598..9391ad4 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+@@ -969,6 +969,7 @@ static const struct sdio_device_id brcmf_sdmmc_ids[] = {
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_43455),
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_4354),
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_4356),
++	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_BROADCOM_4359),
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_CYPRESS_4373),
+ 	BRCMF_SDIO_DEVICE(SDIO_DEVICE_ID_CYPRESS_43012),
+ 	{ /* end: all zeroes */ }
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+index dd586a9..0d6fb10 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c
+@@ -1339,6 +1339,7 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
+ 	switch (pub->chip) {
+ 	case BRCM_CC_4354_CHIP_ID:
+ 	case BRCM_CC_4356_CHIP_ID:
++	case BRCM_CC_4359_CHIP_ID:
+ 	case BRCM_CC_4345_CHIP_ID:
+ 		/* explicitly check SR engine enable bit */
+ 		pmu_cc3_mask = BIT(2);
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+index 264ad63..bcc55d2 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -614,6 +614,7 @@ BRCMF_FW_DEF(43455, "brcmfmac43455-sdio");
+ BRCMF_FW_DEF(43456, "brcmfmac43456-sdio");
+ BRCMF_FW_DEF(4354, "brcmfmac4354-sdio");
+ BRCMF_FW_DEF(4356, "brcmfmac4356-sdio");
++BRCMF_FW_DEF(4359, "brcmfmac4359-sdio");
+ BRCMF_FW_DEF(4373, "brcmfmac4373-sdio");
+ BRCMF_FW_DEF(43012, "brcmfmac43012-sdio");
+ 
+@@ -636,6 +637,7 @@ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_4345_CHIP_ID, 0xFFFFFDC0, 43455),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4354_CHIP_ID, 0xFFFFFFFF, 4354),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4356_CHIP_ID, 0xFFFFFFFF, 4356),
++	BRCMF_FW_ENTRY(BRCM_CC_4359_CHIP_ID, 0xFFFFFFFF, 4359),
+ 	BRCMF_FW_ENTRY(CY_CC_4373_CHIP_ID, 0xFFFFFFFF, 4373),
+ 	BRCMF_FW_ENTRY(CY_CC_43012_CHIP_ID, 0xFFFFFFFF, 43012)
+ };
+diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
+index d1a5d5d..9ee5d35 100644
+--- a/include/linux/mmc/sdio_ids.h
++++ b/include/linux/mmc/sdio_ids.h
+@@ -41,6 +41,7 @@
+ #define SDIO_DEVICE_ID_BROADCOM_43455		0xa9bf
+ #define SDIO_DEVICE_ID_BROADCOM_4354		0x4354
+ #define SDIO_DEVICE_ID_BROADCOM_4356		0x4356
++#define SDIO_DEVICE_ID_BROADCOM_4359		0x4359
+ #define SDIO_DEVICE_ID_CYPRESS_4373		0x4373
+ #define SDIO_DEVICE_ID_CYPRESS_43012		43012
+ 
+-- 
+2.14.1
+
