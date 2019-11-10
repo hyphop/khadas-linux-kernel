@@ -98,6 +98,8 @@ CMD make -C "$DIR" $ARGS
 
 # post
 
+[ "$NOPOST" ] && exit 0
+
 T=/tmp/$N
 
 [ -d /tmp/modules ] || \
@@ -113,9 +115,7 @@ CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
 #cp $DIR/arch/arm64/boot/dts/amlogic/*vim2*.dtb $T/linux.dtb
 #dtc $T/linux.dtb > $T/linux.dts 2>/dev/null
 
-#set +e
 CMD cp $DIR/arch/arm64/boot/Image* $T
-#set -e
 
 [ "$ALL" ] && {
     ${0}_modules

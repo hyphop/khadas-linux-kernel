@@ -4,7 +4,7 @@
 
 ## hyphop ##
 
-#set -e
+set -e
 
 ./kernel_prepare
 ./patch_ ../patches/linux-5.4.-rc5/*.patch
@@ -12,9 +12,8 @@
 #./prepare_
 
 ./make_kernel_mainline_vimsX -n
-./kernel_config ../files/configs/mmc_y
-./kernel_config ../files/configs/eth2_y
+./kernel_config ../files/configs/mmc_m
+./kernel_config ../files/configs/eth2_m
 
 ./make_kernel_mainline_vimsX
-
 TAR=1 ./make_kernel_mainline_vimsX_modules

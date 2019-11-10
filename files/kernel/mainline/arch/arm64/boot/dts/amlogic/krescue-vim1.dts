@@ -3,6 +3,7 @@
 
 #include "meson-gxl-s905x-khadas-vim.dts"
 #include "krescue-vim1.dtsi"
+#include "krescue-leds_vim2.dtsi"
 #include "krescue-vims.dtsi"
 
 

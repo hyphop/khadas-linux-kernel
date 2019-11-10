@@ -6,12 +6,12 @@
 		compatible = "gpio-leds";
 
 		led_white: white {
-			label = "vim3:white";
+			label = "vim:white";
 			gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_HIGH>;
 		};
 
 		led_red: red {
-			label = "vim3:red";
+			label = "vim:red";
 			gpios = <&gpio_expander 5 GPIO_ACTIVE_HIGH>;
 		};
 	};

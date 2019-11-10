@@ -19,7 +19,10 @@ set -e
 
 ./make_kernel_mainline_vimsX -n
 ./kernel_config ../files/configs/mmc_y
-./kernel_config ../files/configs/eth_y
+./kernel_config ../files/configs/eth2_y
 
+NOPOST=1 ./make_kernel_mainline_vimsX dtbs
+#exit 0
 ./make_kernel_mainline_vimsX
+
 TAR=1 ./make_kernel_mainline_vimsX_modules

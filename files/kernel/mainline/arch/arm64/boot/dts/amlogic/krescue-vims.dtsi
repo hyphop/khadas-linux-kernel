@@ -3,10 +3,10 @@
 
 &key_p {
     label = "enter";
-    linux,code = <KEY_ENTER>;
+    linux,code = <KEY_POWER>;
 };
 
 &key_f {
     label = "tab";
-    linux,code = <KEY_TAB>;
+    linux,code = <KEY_FN>;
 };
