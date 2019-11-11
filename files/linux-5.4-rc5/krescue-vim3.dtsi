@@ -1,0 +1,40 @@
+
+// VIM3 add
+
+#include "krescue-spifc-g12.dtsi"
+
+&i2c3{
+    pinctrl-0 = <&i2c3_sck_a_pins>, <&i2c3_sda_a_pins>;
+    clock-frequency = <100000>; /* default 100k */
+    pinctrl-names = "default";
+    status = "okay";
+};
+
+/ {
+
+leds {
+	compatible = "gpio-leds";
+
+	led_white: white {
+	    label = "vim:white";
+	    gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_HIGH>;
+	    linux,default-trigger = "heartbeat";
+	};
+
+	led_red: red {
+	    label = "vim:red";
+	    gpios = <&gpio_expander 5 GPIO_ACTIVE_HIGH>;
+	};
+    };
+
+};
+
+
+&led_red{
+    default-state = "off";
+};
+
+&led_white{
+    default-state = "on";
+    linux,default-trigger = "heartbeat";
+};

@@ -1,0 +1,362 @@
+From 426d052fe36ec38c497e9267a5a58178bb7d3520 Mon Sep 17 00:00:00 2001
+From: hyphop <email2tema@gmail.com>
+Date: Mon, 11 Nov 2019 11:05:03 +0300
+Subject: [PATCH] dtb for krescue
+
+---
+ arch/arm64/boot/dts/amlogic/Makefile               |  5 +++
+ arch/arm64/boot/dts/amlogic/krescue-spifc-g12.dtsi | 50 ++++++++++++++++++++++
+ arch/arm64/boot/dts/amlogic/krescue-spifc-gxl.dtsi | 36 ++++++++++++++++
+ arch/arm64/boot/dts/amlogic/krescue-spifc-gxm.dtsi | 24 +++++++++++
+ arch/arm64/boot/dts/amlogic/krescue-vim1.dts       |  8 ++++
+ arch/arm64/boot/dts/amlogic/krescue-vim2.dts       |  9 ++++
+ arch/arm64/boot/dts/amlogic/krescue-vim2.dtsi      | 24 +++++++++++
+ arch/arm64/boot/dts/amlogic/krescue-vim3-a311d.dts |  6 +++
+ .../arm64/boot/dts/amlogic/krescue-vim3-s905d3.dts |  6 +++
+ arch/arm64/boot/dts/amlogic/krescue-vim3-s922x.dts |  6 +++
+ arch/arm64/boot/dts/amlogic/krescue-vim3.dtsi      | 40 +++++++++++++++++
+ arch/arm64/boot/dts/amlogic/krescue-vims.dtsi      | 37 ++++++++++++++++
+ 12 files changed, 251 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-spifc-g12.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-spifc-gxl.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-spifc-gxm.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim1.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim2.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim2.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim3-a311d.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim3-s905d3.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim3-s922x.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vim3.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/krescue-vims.dtsi
+
+diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+index 84afecb..d5ee074 100644
+--- a/arch/arm64/boot/dts/amlogic/Makefile
++++ b/arch/arm64/boot/dts/amlogic/Makefile
+@@ -29,6 +29,11 @@ dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s805x-p241.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-p281.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-tx3-mini.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxm-khadas-vim2.dtb
++dtb-$(CONFIG_ARCH_MESON) += krescue-vim1.dtb
++dtb-$(CONFIG_ARCH_MESON) += krescue-vim2.dtb
++dtb-$(CONFIG_ARCH_MESON) += krescue-vim3-a311d.dtb
++dtb-$(CONFIG_ARCH_MESON) += krescue-vim3-s905d3.dtb
++dtb-$(CONFIG_ARCH_MESON) += krescue-vim3-s922x.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxm-nexbox-a1.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxm-q200.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-gxm-q201.dtb
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-spifc-g12.dtsi b/arch/arm64/boot/dts/amlogic/krescue-spifc-g12.dtsi
+new file mode 100644
+index 0000000..f4d14b3
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-spifc-g12.dtsi
+@@ -0,0 +1,50 @@
++
++// SPIFC support
++
++&periphs_pinctrl {
++			nor_pins: nor {
++			mux {
++			    groups = "nor_d",
++			    "nor_q",
++			    "nor_c",
++			    "nor_cs";
++			    function = "nor";
++			    bias-disable;
++			};
++		    };
++};
++
++
++&cbus {
++    spifc: spi@14000 {
++    compatible = "amlogic,meson-gxbb-spifc";
++    reg = <0x0 0x14000 0x0 0x80>;
++    #address-cells = <1>;
++    #size-cells = <0>;
++//  clocks = <&clkc CLKID_SPI>;
++    clocks = <&clkc CLKID_SD_EMMC_B>;
++    status = "disabled";
++    };
++};
++
++
++&spifc {
++//  status = "okay";
++    status = "disabled";
++    pinctrl-0 = <&nor_pins>;
++    pinctrl-names = "default";
++
++    spiflash: spi-flash@0 {
++    #address-cells = <1>;
++    #size-cells = <1>;
++    compatible = "winbond,w25q128fw", "jedec,spi-nor";
++    reg = <0>;
++    spi-max-frequency = <104000000>;
++    };
++};
++
++/ {
++    aliases {
++	spifc = &spifc;
++    };
++};
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-spifc-gxl.dtsi b/arch/arm64/boot/dts/amlogic/krescue-spifc-gxl.dtsi
+new file mode 100644
+index 0000000..29423bb
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-spifc-gxl.dtsi
+@@ -0,0 +1,36 @@
++
++// SPIFC support
++
++&cbus {
++    spifc: spi@8c80 {
++	compatible = "amlogic,meson-gx-spifc", "amlogic,meson-gxbb-spifc";
++	reg = <0x0 0x08c80 0x0 0x80>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clocks = <&clkc CLKID_SPI>;
++	status = "disabled";
++    };
++};
++
++
++&spifc {
++//  status = "okay";
++    status = "disabled";
++    pinctrl-0 = <&nor_pins>;
++    pinctrl-names = "default";
++
++    spiflash: spi-flash@0 {
++    #address-cells = <1>;
++    #size-cells = <1>;
++    compatible = "winbond,w25q128fw", "jedec,spi-nor";
++    reg = <0>;
++    spi-max-frequency = <104000000>;
++    };
++};
++
++/ {
++    aliases {
++    spifc = &spifc;
++    };
++};
++
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-spifc-gxm.dtsi b/arch/arm64/boot/dts/amlogic/krescue-spifc-gxm.dtsi
+new file mode 100644
+index 0000000..1e2401a
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-spifc-gxm.dtsi
+@@ -0,0 +1,24 @@
++
++// SPIFC support
++
++&spifc {
++//  status = "okay";
++    status = "disabled";
++    pinctrl-0 = <&nor_pins>;
++    pinctrl-names = "default";
++
++    spiflash: spi-flash@0 {
++    #address-cells = <1>;
++    #size-cells = <1>;
++    compatible = "winbond,w25q128fw", "jedec,spi-nor";
++    reg = <0>;
++    spi-max-frequency = <104000000>;
++    };
++};
++
++/ {
++    aliases {
++    spifc = &spifc;
++    };
++};
++
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim1.dts b/arch/arm64/boot/dts/amlogic/krescue-vim1.dts
+new file mode 100644
+index 0000000..e70b9e1
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim1.dts
+@@ -0,0 +1,8 @@
++
++// ## hyphop ##
++#include "meson-gxl-s905x-khadas-vim.dts"
++#include "krescue-spifc-gxl.dtsi"
++#include "krescue-vim2.dtsi"
++#include "krescue-vims.dtsi"
++
++
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim2.dts b/arch/arm64/boot/dts/amlogic/krescue-vim2.dts
+new file mode 100644
+index 0000000..01480a0
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim2.dts
+@@ -0,0 +1,9 @@
++
++// ## hyphop ##
++
++#include "meson-gxm-khadas-vim2.dts"
++#include "krescue-spifc-gxm.dtsi"
++#include "krescue-vim2.dtsi"
++#include "krescue-vims.dtsi"
++
++
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim2.dtsi b/arch/arm64/boot/dts/amlogic/krescue-vim2.dtsi
+new file mode 100644
+index 0000000..12c11c3
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim2.dtsi
+@@ -0,0 +1,24 @@
++
++
++/ {
++
++/delete-node/ pwmleds;
++
++leds {
++	compatible = "gpio-leds";
++        status = "okay";
++
++	led_white: white {
++	    label = "vim:white";
++	    gpios = <&gpio_ao GPIOAO_9 GPIO_ACTIVE_HIGH>;
++	    linux,default-trigger = "heartbeat";
++	};
++
++    };
++
++};
++
++
++&pwm_AO_ab {
++    status = "disabled";
++};
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim3-a311d.dts b/arch/arm64/boot/dts/amlogic/krescue-vim3-a311d.dts
+new file mode 100644
+index 0000000..df455c4
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim3-a311d.dts
+@@ -0,0 +1,6 @@
++
++// ## hyphop ##
++
++#include "meson-g12b-a311d-khadas-vim3.dts"
++#include "krescue-vim3.dtsi"
++#include "krescue-vims.dtsi"
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim3-s905d3.dts b/arch/arm64/boot/dts/amlogic/krescue-vim3-s905d3.dts
+new file mode 100644
+index 0000000..67349bd
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim3-s905d3.dts
+@@ -0,0 +1,6 @@
++
++// ## hyphop ##
++
++#include "meson-sm1-khadas-vim3l.dts"
++#include "krescue-vim3.dtsi"
++#include "krescue-vims.dtsi"
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim3-s922x.dts b/arch/arm64/boot/dts/amlogic/krescue-vim3-s922x.dts
+new file mode 100644
+index 0000000..e04ecfd
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim3-s922x.dts
+@@ -0,0 +1,6 @@
++
++// ## hyphop ##
++
++#include "meson-g12b-s922x-khadas-vim3.dts"
++#include "krescue-vim3.dtsi"
++#include "krescue-vims.dtsi"
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vim3.dtsi b/arch/arm64/boot/dts/amlogic/krescue-vim3.dtsi
+new file mode 100644
+index 0000000..c61f588
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vim3.dtsi
+@@ -0,0 +1,40 @@
++
++// VIM3 add
++
++#include "krescue-spifc-g12.dtsi"
++
++&i2c3{
++    pinctrl-0 = <&i2c3_sck_a_pins>, <&i2c3_sda_a_pins>;
++    clock-frequency = <100000>; /* default 100k */
++    pinctrl-names = "default";
++    status = "okay";
++};
++
++/ {
++
++leds {
++	compatible = "gpio-leds";
++
++	led_white: white {
++	    label = "vim:white";
++	    gpios = <&gpio_ao GPIOAO_4 GPIO_ACTIVE_HIGH>;
++	    linux,default-trigger = "heartbeat";
++	};
++
++	led_red: red {
++	    label = "vim:red";
++	    gpios = <&gpio_expander 5 GPIO_ACTIVE_HIGH>;
++	};
++    };
++
++};
++
++
++&led_red{
++    default-state = "off";
++};
++
++&led_white{
++    default-state = "on";
++    linux,default-trigger = "heartbeat";
++};
+diff --git a/arch/arm64/boot/dts/amlogic/krescue-vims.dtsi b/arch/arm64/boot/dts/amlogic/krescue-vims.dtsi
+new file mode 100644
+index 0000000..a23b019
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/krescue-vims.dtsi
+@@ -0,0 +1,37 @@
++
++// common VIMS
++
++/ {
++
++gpio-keys-polled {
++    key_p: power-button {
++    };
++};
++
++adc-keys {
++    key_f: button-function {
++    };
++};
++
++aliases {
++    key_p = &key_p;
++    key_f = &key_f;
++    led_white = &led_white;
++//  spifc = &spifc;
++};
++
++};
++
++&key_p {
++    label = "Function";
++    linux,code = <KEY_FN>;
++};
++
++&key_f {
++    label = "Power";
++    linux,code = <KEY_POWER>;
++};
++
++&spifc {
++    status = "okay";
++};
+-- 
+2.14.1
+

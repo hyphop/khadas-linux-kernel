@@ -1,0 +1,6 @@
+
+// ## hyphop ##
+
+#include "meson-sm1-khadas-vim3l.dts"
+#include "krescue-vim3.dtsi"
+#include "krescue-vims.dtsi"

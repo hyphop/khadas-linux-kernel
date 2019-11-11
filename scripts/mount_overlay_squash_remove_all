@@ -3,4 +3,4 @@
 ## hyphop ##
 
 ./mount_overlay_squash /tmp/linux-5.?-rc? -c
-./mount_overlay_squash /tmp/linux-5.?-rc? -d
+./mount_overlay_squash /tmp/linux-5.?-rc? -df
