@@ -1,3 +1,4 @@
 language: c
 #before_install: sudo apt-get install lzop
-script:  cd scripts; sudo ./auto_openwrt_test && sudo ./auto_krescue_test
+#script:  cd scripts; sudo ./auto_openwrt_test
+script:  cd scripts; sudo ./auto_krescue_test
