@@ -20,6 +20,3 @@ export LINUX_VER=linux-5.4-rc5
 
 NOPOST=1 ./make_kernel_mainline_vimsX dtbs
 
-./make_kernel_mainline_vimsX
-
-TAR=1 ./make_kernel_mainline_vimsX_modules
