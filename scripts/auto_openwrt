@@ -14,9 +14,10 @@ export LINUX_VER=linux-5.3-rc6
 ./patch_ ../patches/gitignore-local-fix.patch
 ./patch_ ../patches/0185-arm64-dts-VIM1-add-thermal-zones.patch
 ./patch_ ../patches/0333-exfat.patch
-./patch_ ../patches/wifi/board-VIM1-0069-fix.patch
+#./patch_ ../patches/wifi/board-VIM1-0069-fix.patch
 ./patch_ ../patches/wifi/board-VIM1-fixup-btbcm.patch
 ./patch_ ../patches/linux-5.4-rc5/0030-fix-broken-ethernet-interface-up-down.patch
+./patch_ ../patches/wifi2/*.patch
 
 ./prepare_
 

@@ -1,0 +1,3 @@
+https://patchwork.kernel.org/project/linux-wireless/list/?series=215429
+https://forum.khadas.com/t/wifi-ap6398s-mainline-kernel/4929/31
+
