@@ -1,0 +1,25 @@
+From d6bc8cd647f1db7a0bbbd72d55a4846c63ac06a8 Mon Sep 17 00:00:00 2001
+From: hyphop <art@khadas.com>
+Date: Fri, 20 Dec 2019 19:17:50 +0900
+Subject: [PATCH] fix_wifi_fw_load_freq
+
+---
+ arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+index 8647da7d6..9dd92ff04 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+@@ -268,7 +268,7 @@
+ 
+ 	bus-width = <4>;
+ 	cap-sd-highspeed;
+-	sd-uhs-sdr50;
++//	sd-uhs-sdr50;
+ 	max-frequency = <100000000>;
+ 
+ 	non-removable;
+-- 
+2.17.1
+
