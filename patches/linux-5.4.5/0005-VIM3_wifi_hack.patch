@@ -26,10 +26,10 @@ index 2bd71aae4..5cd84c578 100644
 +//	BROKEN - ap mode lost connections
 +	host->max_segs=1;
 +	host->max_blk_count=3;
-+//	OK 7000 KB RX BW
++//	OK 7000 KB RX BW // 50Mhz OK // 100Mhz data lost
 +	host->max_segs=1;
 +	host->max_blk_count=1;
-+//	OK 8000 KB RX BW
++//	OK 8000 KB RX BW // 50Mhz OK // 100Mhz data lost
 +	host->max_segs=1;
 +	host->max_blk_count=2;
 +	//sdiodev->sg_support = FALSE;
