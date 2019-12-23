@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#= auto build example
+
+## hyphop ##
+
+set -e
+
+export LINUX_VER=linux-5.4.5
+
+./kernel_config ../files/configs/mmc_y
+./kernel_config ../files/configs/eth2_y
+
+NOPOST=1 ./make_kernel_mainline_vimsX dtbs || echo "[w] ups...">&2
+
+./make_kernel_mainline_vimsX
+
+TAR=1 ./make_kernel_mainline_vimsX_modules

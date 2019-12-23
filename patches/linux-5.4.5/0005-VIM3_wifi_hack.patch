@@ -1,0 +1,69 @@
+From dd6844c80e1fdabd1f023ee0445efa209b5f0319 Mon Sep 17 00:00:00 2001
+From: hyphop <art@khadas.com>
+Date: Mon, 23 Dec 2019 13:25:56 +0900
+Subject: [PATCH] VIM3_wifi_hack
+
+---
+ .../broadcom/brcm80211/brcmfmac/bcmsdh.c      | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+index 2bd71aae4..5cd84c578 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+@@ -758,14 +758,52 @@ void brcmf_sdiod_sgtable_alloc(struct brcmf_sdio_dev *sdiodev)
+ 
+ 	func = sdiodev->func2;
+ 	host = func->card->host;
++
++	// VIM3 hack ## hyphop ##
++	// only for VIM3 ( VIM2 VIM3L no need this one )
++	if (!strcmp( sdiodev->settings->board_type, "khadas,vim3" )) {
++	brcmf_info("!!!! WIFI VIM3 hack applay");
++//	DEFAULT is BROKEN
++	host->max_segs=3;
++	host->max_blk_count=3;
++//	BROKEN - ap mode lost connections
++	host->max_segs=1;
++	host->max_blk_count=3;
++//	OK 7000 KB RX BW
++	host->max_segs=1;
++	host->max_blk_count=1;
++//	OK 8000 KB RX BW
++	host->max_segs=1;
++	host->max_blk_count=2;
++	//sdiodev->sg_support = FALSE;
++	}
++
+ 	sdiodev->sg_support = host->max_segs > 1;
+ 	max_blocks = min_t(uint, host->max_blk_count, 511u);
+ 	sdiodev->max_request_size = min_t(uint, host->max_req_size,
+ 					  max_blocks * func->cur_blksize);
+ 	sdiodev->max_segment_count = min_t(uint, host->max_segs,
+ 					   SG_MAX_SINGLE_ALLOC);
+ 	sdiodev->max_segment_size = host->max_seg_size;
+ 
++	brcmf_info("!!!! WIFI DEBUG %s:\
++	host->max_segs: %d\
++	host->max_seg_size: %d\
++	host->max_blk_count: %d\
++	sdiodev->max_request_size: %d\
++	sdiodev->max_segment_count: %d\
++	max_blocks: %d\
++	host->max_req_size: %d\
++", sdiodev->settings->board_type
++, host->max_segs
++, host->max_blk_count
++, host->max_seg_size
++, sdiodev->max_request_size
++, sdiodev->max_segment_count
++, max_blocks
++, host->max_req_size
++);
++
+ 	if (!sdiodev->sg_support)
+ 		return;
+ 
+-- 
+2.17.1
+
