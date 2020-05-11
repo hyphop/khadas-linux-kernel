@@ -1,13 +1,20 @@
 #!/bin/sh
 
-#= auto build example ## krescue config
+#= auto build example
 
 ## hyphop ##
 
 set -e
 
-export LINUX_VER=linux-5.4.5
+export LINUX_VER=linux-5.4-rc5
 
+./kernel_prepare
+
+./patch_ ../patches/$LINUX_VER/*.patch
+
+#exit 0
+
+./make_kernel_mainline_vimsX -n
 ./kernel_config ../files/configs/mmc_m
 ./kernel_config ../files/configs/eth2_y
 

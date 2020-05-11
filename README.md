@@ -16,10 +16,11 @@ https://github.com/hyphop/khadas-linux-kernel
 + usb otg gadgets
 + ...
 
-## Status
+## Download releases
 
-+ experemental
-+ VIM3 VIM2 VIM1 tested OK
+    + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_last_fast
+    + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_last
+    + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_openwrt_last
 
 ## build
 
@@ -37,6 +38,11 @@ https://github.com/hyphop/khadas-linux-kernel
     ./scripts/make_kernel_vims menuconfig
     ./scripts/make_kernel_vims help
 
+## auto build script for releases
+
+    ./scripts/auto_krescue
+    ./scripts/auto_openwrt
+
 
 ## Configs
 
@@ -48,7 +54,6 @@ preparing ... plz wait soon ...
 
 ## Downloads
 
-+ https://github.com/hyphop/khadas-linux-kernel/releases
 + https://github.com/hyphop/khadas-linux-kernel/releases
 
 ## related projects

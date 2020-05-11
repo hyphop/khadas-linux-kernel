@@ -18,7 +18,7 @@ export LINUX_VER=linux-5.4.5
 ./make_kernel_mainline_vimsX -n
 ./kernel_config ../files/configs/mmc_m
 ./kernel_config ../files/configs/eth2_y
-./kernel_config ../files/configs/small_size_y
+./kernel_config ../files/configs/small_size_n
 
 NOPOST=1 ./make_kernel_mainline_vimsX dtbs || echo "[w] ups...">&2
 

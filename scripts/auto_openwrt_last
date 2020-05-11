@@ -6,10 +6,22 @@
 
 set -e
 
-export LINUX_VER=linux-5.6-rcX
+export LINUX_VER=linux-5.4.5
 
-cd /tmp
+./kernel_prepare
 
-git clone --depth 1 https://github.com/chewitt/linux.git -b amlogic-5.6-integ
+./patch_ ../patches/$LINUX_VER/*.patch
+./patch_ ../patches/wifi_4359/*.patch
 
-mv linux $LINUX_VER
+#exit 0
+
+./make_kernel_mainline_vimsX -n
+./kernel_config ../files/configs/mmc_y
+./kernel_config ../files/configs/eth2_y
+./kernel_config ../files/configs/small_size_n
+
+NOPOST=1 ./make_kernel_mainline_vimsX dtbs || echo "[w] ups...">&2
+
+./make_kernel_mainline_vimsX
+
+TAR=1 ./make_kernel_mainline_vimsX_modules

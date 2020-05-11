@@ -6,18 +6,19 @@
 
 set -e
 
-export LINUX_VER=linux-5.5-rc2
+export LINUX_VER=linux-5.4.5
 
 ./kernel_prepare
 
-#./patch_ ../patches/$LINUX_VER/*.patch
-#./patch_ ../patches/wifi2/*.patch
+./patch_ ../patches/$LINUX_VER/*.patch
+./patch_ ../patches/wifi_4359/*.patch
 
 #exit 0
 
 ./make_kernel_mainline_vimsX -n
-./kernel_config ../files/configs/mmc_y
+./kernel_config ../files/configs/mmc_m
 ./kernel_config ../files/configs/eth2_y
+./kernel_config ../files/configs/small_size_n
 
 NOPOST=1 ./make_kernel_mainline_vimsX dtbs || echo "[w] ups...">&2
 
