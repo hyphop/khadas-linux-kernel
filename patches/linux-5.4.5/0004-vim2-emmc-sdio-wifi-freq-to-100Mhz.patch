@@ -18,7 +18,7 @@ index f25ddd1..a1f4f8f 100644
 -	max-frequency = <50000000>;
 +
 +// for test
-+//	cap-sd-highspeed;
++	cap-sd-highspeed;
 +//	sd-uhs-sdr50;
 +
 +//	max-frequency = <50000000>;

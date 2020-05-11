@@ -7,3 +7,6 @@
 
 ./mount_overlay_squash /tmp/linux-5.?.? -c
 ./mount_overlay_squash /tmp/linux-5.?.? -df
+
+./mount_overlay_squash /tmp/linux-5.?.?? -c
+./mount_overlay_squash /tmp/linux-5.?.?? -df

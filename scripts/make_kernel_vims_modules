@@ -11,7 +11,8 @@ CMD(){
     "$@"
 }
 
-CMD rm -rd $INSTALL_MOD_PATH/lib/modules
+#CMD 
+rm -rd $INSTALL_MOD_PATH/lib/modules 2>/dev/null
 
 CMD ${0%_modules} modules_install 1>/dev/null
 

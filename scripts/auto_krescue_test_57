@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#= auto build example
+
+## hyphop ##
+
+set -e
+
+export LINUX_VER=linux-5.7-rc3
+
+./kernel_prepare
+
+#./patch_ ../patches/$LINUX_VER/*.patch
+
+#exit 0
+
+./make_kernel_mainline_vimsX -n
+./kernel_config ../files/configs/mmc_m
+./kernel_config ../files/configs/eth2_m
+
+NOPOST=1 ./make_kernel_mainline_vimsX dtbs
+

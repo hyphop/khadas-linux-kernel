@@ -1,0 +1,85 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= make kernel wrapper
+
+#/ USAGE make_kernel_vims [ARGS]
+
+D=$(dirname $0)
+DR=$(realpath $D)
+
+export PATH=$D/../../fenix/build/toolchains/gcc-linaro-aarch64-linux-gnu/bin:$PATH
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+
+LINUX_SOURCE_URL=https://github.com/hyphop/linux-1
+DEF_CONFIG=kvims_defconfig
+DEF_CONFIG=kvims_light_defconfig
+LINUX_GIT_BRANCH=khadas-vims-4.9.y
+
+#cd $D/..
+
+#git clone --depth 1 $LINUX_SOURCE_URL -b $LINUX_GIT_BRANCH
+
+for DIR in ../../../fenix/linux ; do
+    [ -d "$DIR" ] && break
+done
+
+CMD(){
+    echo "[#] $@">&2
+    "$@"
+}
+#./,make_kernel_vims ../../../../kvims_light_defconfig
+
+MT=-j4
+
+DEF_CONFIG=kvims_defconfig
+DEF_CONFIG=kvims_light_defconfig
+
+cp ../configs/fenix/legacy/kvims_light_defconfig \
+    $DIR/arch/arm64/configs || exit 1
+
+[ -f "$DIR/.config" ] || {
+CMD make -C "$DIR" $DEF_CONFIG
+}
+
+CMD make $MT -C "$DIR" "$@"
+
+
+T=/tmp/linux_fenix
+
+export INSTALL_MOD_PATH=$T
+export INSTALL_MOD_STRIP=1 
+
+[ -d $T ] || \
+    mkdir $T
+
+CMD make $MT -C "$DIR" modules_install
+
+#cp $DIR/defconfig $T/defconfig
+[ -f $T/config.gz ] && \
+CMD mv $T/config.gz $T/config.gz.old
+CMD gzip -c $DIR/.config > $T/config.gz
+CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
+CMD cp $DIR/arch/arm64/boot/Image* $T
+
+#exit 0
+
+cd $T/lib/modules/*.*.*
+
+rm build source
+rm modules.*
+
+CMD find -name \*.ko > modules.list
+
+while read m ; do
+    k=$(basename $m)
+    n=${m#./}
+    l=$(perl -e "\$_='$n'; s/\\w+\//..\//g; print \$_")
+#    echo "[i] $k - $n - $l"
+    mv $n .
+    ln -sf $l $m
+
+done < modules.list
+

@@ -344,12 +344,12 @@ index 0000000..a23b019
 +
 +};
 +
-+&key_p {
++&key_f {
 +    label = "Function";
 +    linux,code = <KEY_FN>;
 +};
 +
-+&key_f {
++&key_p {
 +    label = "Power";
 +    linux,code = <KEY_POWER>;
 +};

@@ -21,16 +21,19 @@ N=$(basename $0)
 DR=$(realpath $D)
 
 #export PATH=$(realpath $D/../../fenix/build/toolchains/gcc-linaro-aarch64-linux-gnu/bin):$PATH
-export PATH=$(realpath $D/../../gcc-x86_64_aarch64-linux-gnu/bin):$PATH
+export PATH=/mnt/temp/khadas/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin:$PATH
+
+#export PATH=$(realpath $D/../../gcc-x86_64_aarch64-linux-gnu/bin):$PATH
 
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-linux-gnu-
+export CROSS_COMPILE=aarch64-none-linux-gnu-
 
 #linux-5.3-rc4.tar.gz
 
 #    ../../../linux-amlogic /tmp/linux-* \
 for DIR in \
-    /tmp/linux-* \
+     /tmp/linux-* \
 ; do
     [ -d "$DIR" ] && break
 done
@@ -118,6 +121,16 @@ CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
 #dtc $T/linux.dtb > $T/linux.dts 2>/dev/null
 
 CMD cp $DIR/arch/arm64/boot/Image* $T
+
+xz -T4 -9 --block-size=3M -c $T/Image > $T/Image.lzma
+
+CMD mkimage -A arm64 \
+    -O linux -C gzip -T kernel -a 0x01080000 -e 0x01080000 \
+    -n kernel -d "$T/Image.gz" "$T/uImage.gzip"
+
+CMD mkimage -A arm64 \
+    -O linux -C lzma -T kernel -a 0x01080000 -e 0x01080000 \
+    -n kernel -d "$T/Image.lzma" "$T/uImage.lzma"
 
 [ "$ALL" ] && {
     ${0}_modules

@@ -1,70 +1,86 @@
-From b0cd66f94611f42190393fa76f9f6aceb640bb8a Mon Sep 17 00:00:00 2001
-From: hyphop <email2tema@gmail.com>
-Date: Mon, 28 Oct 2019 09:11:17 +0300
-Subject: [PATCH] drm-meson-init-g12a-osd2-yuv2rgb-instead-of-osd1
-
----
- drivers/gpu/drm/meson/meson_viu.c    | 26 +++++++++++++-------------
- 2 files changed, 16 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/gpu/drm/meson/meson_viu.c b/drivers/gpu/drm/meson/meson_viu.c
-index 68cf2c2..974b83f 100644
---- a/drivers/gpu/drm/meson/meson_viu.c
-+++ b/drivers/gpu/drm/meson/meson_viu.c
-@@ -75,32 +75,32 @@ static int eotf_bypass_coeff[EOTF_COEFF_SIZE] = {
+--- linux-5.4.5.ro/drivers/gpu/drm/meson/meson_viu.c	2019-12-19 00:09:17.000000000 +0900
++++ linux-5.4.5/drivers/gpu/drm/meson/meson_viu.c	2020-04-09 22:07:31.489802239 +0900
+@@ -12,6 +12,17 @@
+ #include "meson_viu.h"
+ #include "meson_registers.h"
+ 
++int osd12;
++
++static int __init osd12_(char *str)
++{
++    if (*str) return 0;
++    osd12 = 1;
++    return 1;
++}
++
++__setup("osd12", osd12_);
++
+ /**
+  * DOC: Video Input Unit
+  *
+@@ -75,10 +86,38 @@ static int eotf_bypass_coeff[EOTF_COEFF_
  	EOTF_COEFF_RIGHTSHIFT /* right shift */
  };
  
--static void meson_viu_set_g12a_osd1_matrix(struct meson_drm *priv,
 +static void meson_viu_set_g12a_osd2_matrix(struct meson_drm *priv,
++					   int *m, bool csc_on)
++{
++	/* VPP WRAP OSD2 matrix */
++	writel(((m[0] & 0xfff) << 16) | (m[1] & 0xfff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_PRE_OFFSET0_1));
++	writel(m[2] & 0xfff,
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_PRE_OFFSET2));
++	writel(((m[3] & 0x1fff) << 16) | (m[4] & 0x1fff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF00_01));
++	writel(((m[5] & 0x1fff) << 16) | (m[6] & 0x1fff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF02_10));
++	writel(((m[7] & 0x1fff) << 16) | (m[8] & 0x1fff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF11_12));
++	writel(((m[9] & 0x1fff) << 16) | (m[10] & 0x1fff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF20_21));
++	writel((m[11] & 0x1fff) << 16,
++		priv->io_base +	_REG(VPP_WRAP_OSD2_MATRIX_COEF22));
++
++	writel(((m[18] & 0xfff) << 16) | (m[19] & 0xfff),
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_OFFSET0_1));
++	writel(m[20] & 0xfff,
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_OFFSET2));
++
++	writel_bits_relaxed(BIT(0), csc_on ? BIT(0) : 0,
++		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_EN_CTRL));
++}
++
+ static void meson_viu_set_g12a_osd1_matrix(struct meson_drm *priv,
  					   int *m, bool csc_on)
  {
 -	/* VPP WRAP OSD1 matrix */
 +	/* VPP WRAP OSD2 matrix */
  	writel(((m[0] & 0xfff) << 16) | (m[1] & 0xfff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_PRE_OFFSET0_1));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_PRE_OFFSET0_1));
+ 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_PRE_OFFSET0_1));
  	writel(m[2] & 0xfff,
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_PRE_OFFSET2));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_PRE_OFFSET2));
- 	writel(((m[3] & 0x1fff) << 16) | (m[4] & 0x1fff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF00_01));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF00_01));
- 	writel(((m[5] & 0x1fff) << 16) | (m[6] & 0x1fff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF02_10));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF02_10));
- 	writel(((m[7] & 0x1fff) << 16) | (m[8] & 0x1fff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF11_12));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF11_12));
- 	writel(((m[9] & 0x1fff) << 16) | (m[10] & 0x1fff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_COEF20_21));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_COEF20_21));
- 	writel((m[11] & 0x1fff) << 16,
--		priv->io_base +	_REG(VPP_WRAP_OSD1_MATRIX_COEF22));
-+		priv->io_base +	_REG(VPP_WRAP_OSD2_MATRIX_COEF22));
- 
- 	writel(((m[18] & 0xfff) << 16) | (m[19] & 0xfff),
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_OFFSET0_1));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_OFFSET0_1));
- 	writel(m[20] & 0xfff,
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_OFFSET2));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_OFFSET2));
- 
- 	writel_bits_relaxed(BIT(0), csc_on ? BIT(0) : 0,
--		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_EN_CTRL));
-+		priv->io_base + _REG(VPP_WRAP_OSD2_MATRIX_EN_CTRL));
+@@ -103,6 +142,8 @@ static void meson_viu_set_g12a_osd1_matr
+ 		priv->io_base + _REG(VPP_WRAP_OSD1_MATRIX_EN_CTRL));
  }
  
++
++
  static void meson_viu_set_osd_matrix(struct meson_drm *priv,
-@@ -357,7 +357,7 @@ void meson_viu_init(struct meson_drm *priv)
+ 				     enum viu_matrix_sel_e m_select,
+ 			      int *m, bool csc_on)
+@@ -356,9 +397,15 @@ void meson_viu_init(struct meson_drm *pr
+ 	if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXM) ||
  	    meson_vpu_is_compatible(priv, VPU_COMPATIBLE_GXL))
  		meson_viu_load_matrix(priv);
- 	else if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A))
--		meson_viu_set_g12a_osd1_matrix(priv, RGB709_to_YUV709l_coeff,
-+		meson_viu_set_g12a_osd2_matrix(priv, RGB709_to_YUV709l_coeff,
+-	else if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A))
++	else if (meson_vpu_is_compatible(priv, VPU_COMPATIBLE_G12A)) {
++		if ( osd12 ) {
+ 		meson_viu_set_g12a_osd1_matrix(priv, RGB709_to_YUV709l_coeff,
  					       true);
++		} else {
++		meson_viu_set_g12a_osd2_matrix(priv, RGB709_to_YUV709l_coeff,
++					       true);
++		}
++	}
  
  	/* Initialize OSD1 fifo control register */
--- 
-2.14.1
-
+ 	reg = VIU_OSD_DDR_PRIORITY_URGENT |
