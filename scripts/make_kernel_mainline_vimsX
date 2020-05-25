@@ -65,6 +65,8 @@ DEF_CONFIG=kvims_defconfig
 	CMD cp $DR/../configs/linux-mainline/defconfig $T2
 #    }
 
+
+
     C=meson-gxm-khadas-vim2.dts
 #    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C
 #    diff $DR/../configs/$N/$C $E
@@ -74,6 +76,9 @@ DEF_CONFIG=kvims_defconfig
 
     CMD make -C "$DIR" $DEF_CONFIG
 #    CMD make -C "$DIR" menuconfig
+
+#    grep DRM "$DIR/.config" | grep -v \#
+#    exit 0
 }
 
 
@@ -120,8 +125,9 @@ CMD cp $DIR/arch/arm64/boot/dts/amlogic/*vim*.dtb $T
 #cp $DIR/arch/arm64/boot/dts/amlogic/*vim2*.dtb $T/linux.dtb
 #dtc $T/linux.dtb > $T/linux.dts 2>/dev/null
 
-CMD cp $DIR/arch/arm64/boot/Image* $T
+CMD cp $DIR/arch/arm64/boot/Image $T
 
+pigz -9c $T/Image > $T/Image.gz
 xz -T4 -9 --block-size=3M -c $T/Image > $T/Image.lzma
 
 CMD mkimage -A arm64 \
