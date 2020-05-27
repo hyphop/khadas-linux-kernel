@@ -49,14 +49,14 @@ echo "[i] overlay module: $ovlmod">&2
 ## dir [-c|-d] == clear | umount
 case "$dst" in
     -df)
-    CMD sudo umount -sf $sfs
-    CMD sudo umount -sf $sfs.ro
+    CMD sudo umount -fl $sfs
+    CMD sudo umount -fl $sfs.ro
     CMD sudo rm -rf $sfs $sfs.rw $sfs.wk $sfs.ro
     return
     ;;
     -d*)
-    CMD sudo umount -sf $sfs
-    CMD sudo umount -sf $sfs.ro
+    CMD sudo umount -fl $sfs
+    CMD sudo umount -fl $sfs.ro
     return
     ;;
     -c*)
