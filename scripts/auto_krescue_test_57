@@ -6,7 +6,7 @@
 
 set -e
 
-export LINUX_VER=linux-5.7-rc7
+export LINUX_VER=linux-5.7
 
 ./kernel_prepare
 
