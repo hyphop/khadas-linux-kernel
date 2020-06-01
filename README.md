@@ -6,6 +6,8 @@ special linux kernel for usage on Khadas VIMs boards based on legacy kernel from
 
 https://github.com/hyphop/khadas-linux-kernel
 
+## last version is 5.7
+
 ## Features
 
 + mainline 
