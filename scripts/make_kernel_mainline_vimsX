@@ -127,7 +127,7 @@ CMD cp $DIR/arch/arm64/boot/dts/rockchip/*edge*.dtb $T
 CMD cp $DIR/arch/arm64/boot/Image $T
 
 pigz -9c $T/Image > $T/Image.gz
-xz -T4 -9 --block-size=3M -c $T/Image > $T/Image.lzma
+lzma -T4 -e -9 --block-size=3M -c $T/Image > $T/Image.lzma
 
 CMD mkimage -A arm64 \
     -O linux -C gzip -T kernel -a 0x01080000 -e 0x01080000 \
