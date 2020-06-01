@@ -1,0 +1,39 @@
+FROM:	art@khadas.com
+Author: Robin Murphy <robin.murphy@arm.com>
+Date:   Mon Jan 14 12:05:33 2019 +0000
+subject:	add ir-rx khadas edge
+
+    arm64: dts: rockchip: ir-recevier and ir_rx pinctl
+
+--- linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-27 12:23:04.884818800 +0900
++++ linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-27 12:22:55.084009110 +0900
+@@ -109,6 +109,14 @@
+ 		vin-supply = <&vsys>;
+ 	};
+ 
++	ir-receiver {
++		compatible = "gpio-ir-receiver";
++		gpios = <&gpio1 RK_PB6 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ir_rx>;
++		linux,rc-map-name = "rc-khadas";
++	};
++
+ 	adc-keys {
+ 		compatible = "adc-keys";
+ 		io-channels = <&saradc 1>;
+@@ -679,6 +686,14 @@
+ 	status = "okay";
+ };
+ 
++&pinctrl {
++    ir {
++	ir_rx: ir-rx {
++	    rockchip,pins = <1 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
++	};
++    };
++};
++
+ &sdhci {
+ 	bus-width = <8>;
+ 	mmc-hs400-1_8v;

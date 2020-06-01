@@ -1,0 +1,26 @@
+FROM:	art@khadas.com
+subject:	add spi flash for khadas edge
+
+    arm64: dts: rockchip: Add spi flash node to rk3399-khadas-edge.dtsi
+    
+
+--- linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-26 20:30:18.579983233 +0900
++++ linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-26 20:26:17.353399417 +0900
+@@ -802,3 +802,17 @@
+ &vopl_mmu {
+ 	status = "okay";
+ };
++
++
++&spi1 {
++    max-freq = <104000000>;
++    status = "okay";
++
++    spiflash: flash@0 {
++    u-boot,dm-pre-reloc;
++    compatible = "winbond,w25q128fw", "jedec,spi-nor";
++    reg = <0>;
++    spi-max-frequency = <104000000>;
++    };
++};
++

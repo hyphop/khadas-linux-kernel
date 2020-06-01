@@ -6,5 +6,5 @@ share/*
 .unused/
 modules/
 work/
-linux*
+#linux*
 

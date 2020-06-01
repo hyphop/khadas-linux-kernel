@@ -1,0 +1,21 @@
+
+--- linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-27 12:23:04.884818800 +0900
++++ linux-5.4.5/arch/arm64/boot/dts/rockchip/rk3399-khadas-edge.dtsi	2020-05-27 12:22:55.084009110 +0900
+
+@@ -124,5 +117,5 @@
+ 		recovery {
+-			label = "Recovery";
+-			linux,code = <KEY_VENDOR>;
++			label = "Function";
++			linux,code = <KEY_F>;
+ 			press-threshold-microvolt = <18000>;
+ 		};
+@@ -139,7 +132,7 @@
+ 		power {
+ 			debounce-interval = <100>;
+ 			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
+-			label = "GPIO Key Power";
++			label = "Power";
+ 			linux,code = <KEY_POWER>;
+ 			wakeup-source;
+ 		};
