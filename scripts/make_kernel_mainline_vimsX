@@ -129,12 +129,15 @@ CMD cp $DIR/arch/arm64/boot/Image $T
 pigz -9c $T/Image > $T/Image.gz
 lzma -T4 -e -9 --block-size=3M -c $T/Image > $T/Image.lzma
 
+KERNEL_ADDR=0x01080000
+KERNEL_ADDR=0x0f080000
+
 CMD mkimage -A arm64 \
-    -O linux -C gzip -T kernel -a 0x01080000 -e 0x01080000 \
+    -O linux -C gzip -T kernel -a $KERNEL_ADDR -e $KERNEL_ADDR \
     -n kernel -d "$T/Image.gz" "$T/uImage.gzip"
 
 CMD mkimage -A arm64 \
-    -O linux -C lzma -T kernel -a 0x01080000 -e 0x01080000 \
+    -O linux -C lzma -T kernel -a $KERNEL_ADDR -e $KERNEL_ADDR \
     -n kernel -d "$T/Image.lzma" "$T/uImage.lzma"
 
 [ "$ALL" ] && {
