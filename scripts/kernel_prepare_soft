@@ -1,0 +1,85 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= download kernel source + tc
+
+#set -e
+
+D=$(dirname $0)
+N=$(basename $0)
+DR=$(realpath $D)
+
+. "$DR/config.conf"
+
+TO="$D/$TO2"
+
+uid=$(id -u)
+gid=$(id -g)
+
+CMD(){
+    echo "">&2
+    $@
+}
+
+DL(){
+
+    echo "[i] download $DOWNLOAD_BASE/$1 $2">&2
+
+    [ -f "$2" ] && {
+	[ -f "$2.md5sum" ] && {
+	    md5=$(md5sum "$2")
+	    md5=${md5% *}
+	    grep "$md5" "$2.md5sum" 2>/dev/null 1>/dev/null && {
+		echo "[i] downloaded already">&2
+		return 0
+	    }
+	    echo "[w] md5 $md5 wrong">&2
+	}
+    }
+
+    curl -jkL "$DOWNLOAD_BASE/$1" -o "$2" -C- && {
+	echo "[i] gen md5 for $2">&2
+	md5sum "$2" > "$2.md5sum"
+    }
+
+}
+
+#exit 0
+
+
+for LINK in $GCC_SRC; do
+
+FILE=$(basename $LINK)
+
+DL "$LINK" "$TO$FILE"
+
+T="$(realpath "$GCC_PATH")"
+
+done
+
+exit 
+
+
+for LINK in $LINUX_SRC_SFS ; do
+
+FILE=$(basename $LINK)
+
+T="$(realpath "$KERNEL_PATH2/${FILE%.*}")"
+
+[ -f "$T/README" ] &&  {
+    echo "[i] kernel already prepared">&2
+    exit 0
+
+}
+
+DL "$LINK" "$TO$FILE"
+
+echo "[i] $FILE">&2
+
+
+grep "$T" /proc/mounts || {
+    CMD $DR/mount_overlay_squash "$TO$FILE" "$T"
+}
+
+done
