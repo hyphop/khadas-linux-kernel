@@ -21,7 +21,15 @@ N=$(basename $0)
 DR=$(realpath $D)
 
 #export PATH=$(realpath $D/../../fenix/build/toolchains/gcc-linaro-aarch64-linux-gnu/bin):$PATH
-export PATH=/mnt/temp/khadas/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin:$PATH
+
+. $D/config.conf
+
+[ -d $GCC_PATH ] || {
+    echo "[e] GCC_PATH: $GCC_PATH - not found">&2
+    exit 1
+}
+
+export PATH="$(realpath $GCC_PATH)/bin:$PATH"
 
 #export PATH=$(realpath $D/../../gcc-x86_64_aarch64-linux-gnu/bin):$PATH
 
@@ -64,8 +72,6 @@ DEF_CONFIG=kvims_defconfig
 #    CMD cp $DR/../configs/$N/defconfig $T2 || {
 	CMD cp $DR/../configs/linux-mainline/defconfig $T2
 #    }
-
-
 
     C=meson-gxm-khadas-vim2.dts
 #    E=$DIR/arch/$ARCH/boot/dts/amlogic/$C

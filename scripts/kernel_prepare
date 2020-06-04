@@ -24,7 +24,7 @@ CMD(){
 
 DL(){
 
-    echo "[i] download $DOWNLOAD_BASE/$1 $2">&2
+    echo "[i] download $DOWNLOAD_BASE$1 $2">&2
 
     [ -f "$2" ] && {
 	[ -f "$2.md5sum" ] && {
@@ -38,7 +38,7 @@ DL(){
 	}
     }
 
-    curl -jkL "$DOWNLOAD_BASE/$1" -o "$2" -C- -# && {
+    curl -jkL "$DOWNLOAD_BASE$1" -o "$2" -C- -# && {
 	echo "[i] gen md5 for $2">&2
 	md5sum "$2" > "$2.md5sum"
     }

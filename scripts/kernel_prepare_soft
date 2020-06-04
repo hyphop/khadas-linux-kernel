@@ -24,7 +24,7 @@ CMD(){
 
 DL(){
 
-    echo "[i] download $DOWNLOAD_BASE/$1 $2">&2
+    echo "[i] download $DOWNLOAD_BASE$1 $2">&2
 
     [ -f "$2" ] && {
 	[ -f "$2.md5sum" ] && {
@@ -38,7 +38,7 @@ DL(){
 	}
     }
 
-    curl -jkL "$DOWNLOAD_BASE/$1" -o "$2" -C- && {
+    curl -jkL "$DOWNLOAD_BASE$1" -o "$2" -C- && {
 	echo "[i] gen md5 for $2">&2
 	md5sum "$2" > "$2.md5sum"
     }
@@ -51,21 +51,42 @@ DL(){
 for LINK in $GCC_SRC; do
 
 FILE=$(basename $LINK)
-
-DL "$LINK" "$TO$FILE"
+FILE_D=${FILE%.tar.*}
 
 T="$(realpath "$GCC_PATH")"
 
+[ -d "$TO$FILE_D" ] || \
+mkdir -p "$TO$FILE_D"
+
+[ -e "$TO$FILE_D/.extracted" ] || {
+
+DL "$LINK" "$TO$FILE"
+
+echo "extract to tc $TO$FILE_D ...">&2
+
+tar -xf "$TO$FILE" -C "$TO$FILE_D" --strip-components=1 && {
+
+echo $(date) > "$TO$FILE_D/.extracted"
+
+ln -sf "$(realpath $TO$FILE_D)" $GCC_PATH
+
+}
+
+}
+
 done
 
-exit 
 
+DOWNLOAD_BASE=
 
-for LINK in $LINUX_SRC_SFS ; do
+for LINK in $LINUX_SRC_ ; do
 
 FILE=$(basename $LINK)
 
-T="$(realpath "$KERNEL_PATH2/${FILE%.*}")"
+T="$(realpath "$KERNEL_PATH2/$FILE")"
+T="${T%.tar.*}"
+
+[ -d "$T" ] || mkdir -p "$T"
 
 [ -f "$T/README" ] &&  {
     echo "[i] kernel already prepared">&2
@@ -77,9 +98,10 @@ DL "$LINK" "$TO$FILE"
 
 echo "[i] $FILE">&2
 
+echo "extract kernel to $T ...">&2
 
-grep "$T" /proc/mounts || {
-    CMD $DR/mount_overlay_squash "$TO$FILE" "$T"
-}
+tar -xf "$TO$FILE" -C "$T" --strip-components=1 || exit 1
+
+echo "OK ready">&2
 
 done

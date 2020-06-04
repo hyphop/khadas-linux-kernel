@@ -14,9 +14,6 @@ export LINUX_VER=linux-5.7
 
 ./patch_ ../patches/$LINUX_VER/*.patch || exit 1
 ./patch_ ../patches/linux-krescue/*.patch || exit 1
-#./patch_ ../patches/wifi_4359/*.patch || exit 1
-
-#exit 0
 
 ./make_kernel_mainline_vimsX -n
 ./kernel_config ../files/configs/mmc_m

@@ -2,14 +2,14 @@
 
 # khadas linux kernel
 
-special linux kernel for usage on Khadas VIMs boards based on legacy kernel from amlogic
+mainline linux kernel for usage on Khadas VIMs and Edge boards 
 
 https://github.com/hyphop/khadas-linux-kernel
 
-## last version is 5.7
-
 ## Features
 
++ kernel version is 5.7
++ one kernel for amlogic and rockchip
 + mainline 
 + small kernel size
 + kexec
@@ -20,31 +20,26 @@ https://github.com/hyphop/khadas-linux-kernel
 
 ## Download releases
 
+    + https://github.com/hyphop/khadas-linux-kernel/releases/tag/amlrock
+    + https://github.com/hyphop/khadas-linux-kernel/releases/tag/amlrock_small
     + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_last_fast
     + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_last
     + https://github.com/hyphop/khadas-linux-kernel/releases/tag/krescue_openwrt_last
 
-## build
+## download 
 
-    # git clone https://github.com/khadas/fenix
-    # cd fenix
-    # ...
-    cd ..
     git clone https://github.com/hyphop/khadas-linux-kernel
     cd khadas-linux-kernel
-    ./scripts/make_kernel_vims -j16
-    ./scripts/make_kernel_vims_modules
-
-## build custom usage
-
-    ./scripts/make_kernel_vims menuconfig
-    ./scripts/make_kernel_vims help
 
 ## auto build script for releases
 
     ./scripts/auto_krescue
     ./scripts/auto_openwrt
 
+## manual build usage
+
+    ./make_kernel_mainline_vimsX
+    ./make_kernel_mainline_vimsX_modules
 
 ## Configs
 
@@ -60,6 +55,7 @@ preparing ... plz wait soon ...
 
 ## related projects
 
++ https://github.com/hyphop/khadas-uboot
 + https://github.com/hyphop/khadas-uboot-spi
 + https://github.com/hyphop/khadas-rescue
 + https://github.com/hyphop/khadas-openwrt
