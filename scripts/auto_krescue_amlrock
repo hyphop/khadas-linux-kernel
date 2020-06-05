@@ -14,8 +14,8 @@ export LINUX_VER=linux-5.7
 
 CHK=1 ./patch_ || {
 
-./patch_ ../patches/$LINUX_VER/*.patch || exit 1
-./patch_ ../patches/linux-krescue/*.patch || exit 1
+./patch_ ../patches/$LINUX_VER/*.patch || exit 12
+./patch_ ../patches/linux-krescue/*.patch || exit 123
 
 LAST=1 ./patch_
 }
