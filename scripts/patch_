@@ -39,3 +39,5 @@ done
 
 
 [ "$LAST" ] && echo $(date) > $DIR/.patched
+
+exit 0
