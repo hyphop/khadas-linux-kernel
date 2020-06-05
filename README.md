@@ -41,6 +41,12 @@ https://github.com/hyphop/khadas-linux-kernel
     ./make_kernel_mainline_vimsX
     ./make_kernel_mainline_vimsX_modules
 
+## Deps
+
++ flex bc 
+
+    apt-get install flex bc 
+
 ## Configs
 
 [configs](configs)

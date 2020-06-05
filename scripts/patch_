@@ -27,7 +27,15 @@ done
 
 echo "[i] patch dir $DIR">&2
 
+[ "$CHK" ] && [ -s $DIR/.patched ] && {
+    echo "[i] patched already $(cat "$DIR/.patched")">&2
+    exit 0
+}
+
 for p in $@; do
     echo "[i] patch $p">&2
     patch -d $DIR -p1 < $p
 done
+
+
+[ "$LAST" ] && echo $(date) > $DIR/.patched

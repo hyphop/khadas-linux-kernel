@@ -12,8 +12,13 @@ export LINUX_VER=linux-5.7
 
 ./$kernel_prepare
 
+CHK=1 ./patch_ || {
+
 ./patch_ ../patches/$LINUX_VER/*.patch || exit 1
 ./patch_ ../patches/linux-krescue/*.patch || exit 1
+
+LAST=1 ./patch_
+}
 
 ./make_kernel_mainline_vimsX -n
 ./kernel_config ../files/configs/mmc_m
