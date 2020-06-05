@@ -3,4 +3,4 @@ language: c
 # test openwrt kernel
 #script:  cd scripts; sudo ./auto_openwrt_test
 # test krescue kernel
-script:  cd scripts; sudo ./auto_krescue_test57
+script:  scripts/auto_krescue
