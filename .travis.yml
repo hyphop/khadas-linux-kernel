@@ -1,5 +1,5 @@
 language: c
-#before_install: sudo apt-get install lzop
+before_install: sudo apt-get install pigz
 # test openwrt kernel
 #script:  cd scripts; sudo ./auto_openwrt_test
 # test krescue kernel
