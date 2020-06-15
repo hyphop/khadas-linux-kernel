@@ -1,5 +1,5 @@
 language: c
-before_install: sudo apt-get install pigz
+before_install: sudo apt-get install pigz u-boot-tools
 # test openwrt kernel
 #script:  cd scripts; sudo ./auto_openwrt_test
 # test krescue kernel
