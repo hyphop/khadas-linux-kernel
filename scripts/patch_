@@ -27,10 +27,16 @@ done
 
 echo "[i] patch dir $DIR">&2
 
-[ "$CHK" ] && [ -s $DIR/.patched ] && {
+[ "$CHK" ] && {
+
+[ -s $DIR/.patched ] && {
     echo "[i] patched already $(cat "$DIR/.patched")">&2
     exit 0
 }
+    exit 1
+
+}
+
 
 for p in $@; do
     echo "[i] patch $p">&2
