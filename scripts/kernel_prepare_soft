@@ -45,8 +45,15 @@ DL(){
 
 }
 
-#exit 0
+flex=$(which flex 2>/dev/null)
 
+[ "$flex" ] || {
+    echo "[i] flex not found , need to install flex"
+    echo "	sudo apt-get install flex"
+    exit 1
+}
+
+#exit 0
 
 for LINK in $GCC_SRC; do
 
@@ -105,3 +112,4 @@ tar -xf "$TO$FILE" -C "$T" --strip-components=1 || exit 1
 echo "OK ready">&2
 
 done
+
