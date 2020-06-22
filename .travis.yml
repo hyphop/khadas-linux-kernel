@@ -3,4 +3,5 @@ before_install: sudo apt-get install pigz u-boot-tools
 # test openwrt kernel
 #script:  cd scripts; sudo ./auto_openwrt_test
 # test krescue kernel
-script:  scripts/auto_krescue
+#script:  TESTONLY=1 scripts/auto_krescue
+script:  TESTONLY=  scripts/auto_krescue

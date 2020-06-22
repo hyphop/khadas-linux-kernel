@@ -26,6 +26,11 @@ LAST=1 ./patch_
 
 NOPOST=1 ./make_kernel_mainline_vimsX dtbs || echo "[w] ups...">&2
 
+[ "$TESTONLY" ] && {
+    echo "[i] OK testonly mode"
+    exit 0
+}
+
 ./make_kernel_mainline_vimsX
 
 TAR=1 ./make_kernel_mainline_vimsX_modules
