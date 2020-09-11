@@ -1,0 +1,101 @@
+From 158e26993133634edcb29c1a8a6250630346d3ac Mon Sep 17 00:00:00 2001
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Sun, 28 Apr 2019 00:49:42 +0200
+Subject: [PATCH 11/13] usb: dwc3: of-simple: remove Amlogic GXL and AXG
+ compatibles
+
+There is now a dedicated driver for these SoCs making the old compatible
+obsolete.
+
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/usb/dwc3/dwc3-of-simple.c | 30 ++++++------------------------
+ 1 file changed, 6 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+index e64754be4..8852fbfde 100644
+--- a/drivers/usb/dwc3/dwc3-of-simple.c
++++ b/drivers/usb/dwc3/dwc3-of-simple.c
+@@ -27,7 +27,6 @@ struct dwc3_of_simple {
+ 	struct clk_bulk_data	*clks;
+ 	int			num_clocks;
+ 	struct reset_control	*resets;
+-	bool			pulse_resets;
+ 	bool			need_reset;
+ };
+ 
+@@ -38,7 +37,6 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	struct device_node	*np = dev->of_node;
+ 
+ 	int			ret;
+-	bool			shared_resets = false;
+ 
+ 	simple = devm_kzalloc(dev, sizeof(*simple), GFP_KERNEL);
+ 	if (!simple)
+@@ -54,13 +52,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
+ 		simple->need_reset = true;
+ 
+-	if (of_device_is_compatible(np, "amlogic,meson-axg-dwc3") ||
+-	    of_device_is_compatible(np, "amlogic,meson-gxl-dwc3")) {
+-		shared_resets = true;
+-		simple->pulse_resets = true;
+-	}
+-
+-	simple->resets = of_reset_control_array_get(np, shared_resets, true,
++	simple->resets = of_reset_control_array_get(np, false, true,
+ 						    true);
+ 	if (IS_ERR(simple->resets)) {
+ 		ret = PTR_ERR(simple->resets);
+@@ -68,15 +60,9 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	if (simple->pulse_resets) {
+-		ret = reset_control_reset(simple->resets);
+-		if (ret)
+-			goto err_resetc_put;
+-	} else {
+-		ret = reset_control_deassert(simple->resets);
+-		if (ret)
+-			goto err_resetc_put;
+-	}
++	ret = reset_control_deassert(simple->resets);
++	if (ret)
++		goto err_resetc_put;
+ 
+ 	ret = clk_bulk_get_all(simple->dev, &simple->clks);
+ 	if (ret < 0)
+@@ -102,8 +88,7 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	clk_bulk_put_all(simple->num_clocks, simple->clks);
+ 
+ err_resetc_assert:
+-	if (!simple->pulse_resets)
+-		reset_control_assert(simple->resets);
++	reset_control_assert(simple->resets);
+ 
+ err_resetc_put:
+ 	reset_control_put(simple->resets);
+@@ -118,8 +103,7 @@ static void __dwc3_of_simple_teardown(struct dwc3_of_simple *simple)
+ 	clk_bulk_put_all(simple->num_clocks, simple->clks);
+ 	simple->num_clocks = 0;
+ 
+-	if (!simple->pulse_resets)
+-		reset_control_assert(simple->resets);
++	reset_control_assert(simple->resets);
+ 
+ 	reset_control_put(simple->resets);
+ 
+@@ -191,8 +175,6 @@ static const struct of_device_id of_dwc3_simple_match[] = {
+ 	{ .compatible = "xlnx,zynqmp-dwc3" },
+ 	{ .compatible = "cavium,octeon-7130-usb-uctl" },
+ 	{ .compatible = "sprd,sc9860-dwc3" },
+-	{ .compatible = "amlogic,meson-axg-dwc3" },
+-	{ .compatible = "amlogic,meson-gxl-dwc3" },
+ 	{ .compatible = "allwinner,sun50i-h6-dwc3" },
+ 	{ /* Sentinel */ }
+ };
+-- 
+2.17.1
+

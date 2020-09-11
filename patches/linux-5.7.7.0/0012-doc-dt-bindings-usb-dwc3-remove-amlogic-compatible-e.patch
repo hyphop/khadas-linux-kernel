@@ -1,0 +1,28 @@
+From 10df136c9e6a4d7d632e221c1aa57f46f7cda8d1 Mon Sep 17 00:00:00 2001
+From: Neil Armstrong <narmstrong@baylibre.com>
+Date: Tue, 17 Mar 2020 15:49:52 +0100
+Subject: [PATCH 12/13] doc: dt: bindings: usb: dwc3: remove amlogic compatible
+ entries
+
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ Documentation/devicetree/bindings/usb/dwc3.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 9946ff9ba..d03edf9d3 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -15,8 +15,6 @@ Required properties:
+ Exception for clocks:
+   clocks are optional if the parent node (i.e. glue-layer) is compatible to
+   one of the following:
+-    "amlogic,meson-axg-dwc3"
+-    "amlogic,meson-gxl-dwc3"
+     "cavium,octeon-7130-usb-uctl"
+     "qcom,dwc3"
+     "samsung,exynos5250-dwusb3"
+-- 
+2.17.1
+

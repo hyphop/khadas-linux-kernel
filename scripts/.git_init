@@ -7,7 +7,8 @@
 ##	./tools/99_git_init
 
 NAME=$(basename "$(realpath .)")  #"#
-GNME="https://github.com/hyphop/$NAME.git"
+GNAM=$(basename "$(realpath ..)")  #"#
+GNME="https://github.com/$GNAM/$NAME.git"
 
 echo "[i] create GIt $NAME => $GNME">&2
 

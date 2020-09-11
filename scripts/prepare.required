@@ -1,0 +1,2 @@
+
+libncurses-dev build-essential libncurses5-dev gcc libssl-dev  bc

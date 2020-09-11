@@ -1,0 +1,67 @@
+From f90bb751b477c944f41b668e4fd290909a794d6f Mon Sep 17 00:00:00 2001
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date: Sun, 28 Apr 2019 00:53:16 +0200
+Subject: [PATCH 13/13] dt-bindings: usb: dwc3: remove old DWC3 wrapper
+
+There is now an updated bindings for these SoCs making the old
+compatible obsolete.
+
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ .../devicetree/bindings/usb/amlogic,dwc3.txt  | 42 -------------------
+ 1 file changed, 42 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+
+diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+deleted file mode 100644
+index 9a8b63190..000000000
+--- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
++++ /dev/null
+@@ -1,42 +0,0 @@
+-Amlogic Meson GX DWC3 USB SoC controller
+-
+-Required properties:
+-- compatible:	depending on the SoC this should contain one of:
+-			* amlogic,meson-axg-dwc3
+-			* amlogic,meson-gxl-dwc3
+-- clocks:	a handle for the "USB general" clock
+-- clock-names:	must be "usb_general"
+-- resets:	a handle for the shared "USB OTG" reset line
+-- reset-names:	must be "usb_otg"
+-
+-Required child node:
+-A child node must exist to represent the core DWC3 IP block. The name of
+-the node is not important. The content of the node is defined in dwc3.txt.
+-
+-PHY documentation is provided in the following places:
+-- Documentation/devicetree/bindings/phy/meson-gxl-usb2-phy.txt
+-- Documentation/devicetree/bindings/phy/meson-gxl-usb3-phy.txt
+-
+-Example device nodes:
+-		usb0: usb@ff500000 {
+-			compatible = "amlogic,meson-axg-dwc3";
+-			#address-cells = <2>;
+-			#size-cells = <2>;
+-			ranges;
+-
+-			clocks = <&clkc CLKID_USB>;
+-			clock-names = "usb_general";
+-			resets = <&reset RESET_USB_OTG>;
+-			reset-names = "usb_otg";
+-
+-			dwc3: dwc3@ff500000 {
+-				compatible = "snps,dwc3";
+-				reg = <0x0 0xff500000 0x0 0x100000>;
+-				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+-				dr_mode = "host";
+-				maximum-speed = "high-speed";
+-				snps,dis_u2_susphy_quirk;
+-				phys = <&usb3_phy>, <&usb2_phy0>;
+-				phy-names = "usb2-phy", "usb3-phy";
+-			};
+-		};
+-- 
+2.17.1
+

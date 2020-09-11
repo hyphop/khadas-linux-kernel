@@ -6,14 +6,18 @@
 
 set -e
 cd "$(dirname "$0")"
+
+export LINUX_VER=linux-5.7.7
+
 . ./config.conf
 
-export LINUX_VER=linux-5.7
+export KERNEL_SOURCE_DIR="$KERNEL_SOURCE_DIR"
 
 ./$kernel_prepare
 
 CHK=1 ./patch_ || {
-./patch_ ../patches/$LINUX_VER/*.patch 
+#./patch_ ../patches/$LINUX_VER/*.patch 
+./patch_ ../patches/$LINUX_VER*/*.patch 
 ./patch_ ../patches/linux-krescue/*.patch
 LAST=1 ./patch_
 }

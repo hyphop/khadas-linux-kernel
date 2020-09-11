@@ -1,8 +1,0 @@
-
-// ## hyphop ##
-#include "meson-gxl-s905x-khadas-vim.dts"
-#include "krescue-spifc-gxl.dtsi"
-#include "krescue-vim2.dtsi"
-#include "krescue-vims.dtsi"
-
-

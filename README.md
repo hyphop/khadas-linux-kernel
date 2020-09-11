@@ -8,7 +8,7 @@ https://github.com/hyphop/khadas-linux-kernel
 
 ## Features
 
-+ kernel version is 5.7
++ kernel version is 5.7.7
 + one kernel for amlogic and rockchip
 + mainline 
 + small kernel size

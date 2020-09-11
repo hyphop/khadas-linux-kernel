@@ -2,7 +2,7 @@
 
 ## hyphop ##
 
-#= patcher 
+#= source patcher
 
 set -e 
 
@@ -11,14 +11,7 @@ set -e
     shift
 }
 
-[ "$DIR" ] || {
-for DIR in \
-    /tmp/linux-* \
-    "" \
-; do
-    [ -d "$DIR" ] && break
-done
-}
+[ "$DIR" ] || DIR="$KERNEL_SOURCE_DIR"
 
 [ "$DIR" ] || {
     echo "[i] undef patch DIR">&2
@@ -37,12 +30,10 @@ echo "[i] patch dir $DIR">&2
 
 }
 
-
 for p in $@; do
     echo "[i] patch $p">&2
     patch -d $DIR -p1 < $p
 done
-
 
 [ "$LAST" ] && echo $(date) > $DIR/.patched
 

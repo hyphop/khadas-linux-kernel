@@ -90,8 +90,10 @@ for LINK in $LINUX_SRC_ ; do
 
 FILE=$(basename $LINK)
 
-T="$(realpath "$KERNEL_PATH2/$FILE")"
-T="${T%.tar.*}"
+#T="$(realpath "$KERNEL_PATH2/$FILE")"
+#T="${T%.tar.*}"
+
+T="$KERNEL_SOURCE_DIR"
 
 [ -d "$T" ] || mkdir -p "$T"
 

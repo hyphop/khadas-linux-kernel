@@ -1,0 +1,36 @@
+Fixes: 013af227f58a97 ("usb: dwc3: meson-g12a: handle the phy and glue registers separately")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index ce5388338389..1f7f4d88ed9d 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -708,11 +708,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
+ 
+ 	priv->drvdata = of_device_get_match_data(&pdev->dev);
+-
+ 	priv->dev = dev;
+-	ret = priv->drvdata->setup_regmaps(priv, base);
+-	if (ret)
+-		return ret;
+ 
+ 	priv->vbus = devm_regulator_get_optional(dev, "vbus");
+ 	if (IS_ERR(priv->vbus)) {
+@@ -749,6 +745,10 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_disable_clks;
+ 
++	ret = priv->drvdata->setup_regmaps(priv, base);
++	if (ret)
++		return ret;
++
+ 	if (priv->vbus) {
+ 		ret = regulator_enable(priv->vbus);
+ 		if (ret)
+-- 
+2.26.2

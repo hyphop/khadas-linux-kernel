@@ -1,6 +1,0 @@
-
-// ## hyphop ##
-
-#include "meson-g12b-a311d-khadas-vim3.dts"
-#include "krescue-vim3.dtsi"
-#include "krescue-vims.dtsi"

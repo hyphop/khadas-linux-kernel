@@ -2,9 +2,14 @@
 
 ## hyphop ##
 
+#= make install modules
 
-export INSTALL_MOD_PATH=/tmp/modules
+. $(dirname "$0")/config.conf
+
+export INSTALL_MOD_PATH=$KERNEL_OUTPUT_DIR
 export INSTALL_MOD_STRIP=1 
+
+echo "[i] install modules to $KERNEL_OUTPUT_DIR"
 
 CMD(){
     echo "[#] $@">&2

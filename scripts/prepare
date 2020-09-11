@@ -1,0 +1,26 @@
+#!/bin/sh
+
+## hyphop ##
+
+#= prepare tc
+
+D=$(dirname "$0")
+FAIL(){
+echo "\
+========
+REQUIRED $NEED
+========
+
+    sudo apt-get install $REQUIRED
+"
+exit 1
+
+}
+
+REQUIRED=$(echo $(grep -v "^#" "$0.required"))
+echo "[i] CHECK required tools: $REQUIRED"
+
+pkg-config --libs ncurses || FAIL
+pkg-config --libs libssl || FAIL
+
+echo "[i] CHECKED"
